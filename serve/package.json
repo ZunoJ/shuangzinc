@@ -9,8 +9,16 @@
   "author": "zinc",
   "license": "ISC",
   "dependencies": {
+    "ip": "^1.1.5",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0"
+    "koa-json": "^2.0.2",
+    "koa-onerror": "^4.1.0",
+    "koa-router": "^7.4.0",
+    "log4js": "^6.1.0",
+    "mysql": "^2.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.3"
   }
 }
