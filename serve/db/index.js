@@ -1,8 +1,10 @@
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('info', 'root', '12345678root', {
-    host: '172.21.0.13',
+    host: 'cdb-csvkp3t0.bj.tencentcdb.com',
+    port:'10044',
     dialect: 'mysql',
+    sync: { force: true },
     pool: {
         max: 5,
         min: 0,
@@ -55,7 +57,7 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
 	    //普通索引,默认BTREE
         {
             unique: true,
-            fields: ['pid']
+            fields: ['id']
         },
      ]
 })

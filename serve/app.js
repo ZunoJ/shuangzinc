@@ -12,7 +12,7 @@ const onerror = require('koa-onerror')
 const miHttpError = require('./http_error')
 const app = new Koa()
 onerror(app)
-app.use(miHttpError())
+// app.use(miHttpError())
 app.use(miLog({
     env: app.env,  // koa 提供的环境变量
     projectName: 'koa2-tutorial',
