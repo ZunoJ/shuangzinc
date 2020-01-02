@@ -21,10 +21,7 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     },
     //用户名
     username: {
-        type: Sequelize.STRING,
-        validate:{
-	        isEmail: true,   //类型检测,是否是邮箱格式
-        }
+        type: Sequelize.STRING
     },
     //密码
     pwd: {
@@ -34,7 +31,7 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     //状态
     status: {
         type: Sequelize.INTEGER,
-         defaultValue: 0,//默认值是0
+        defaultValue: 0,//默认值是0
     },
     //昵称
     nickname: {
