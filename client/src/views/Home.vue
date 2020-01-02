@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       value1: 50
-    };
+    }; 
   }
 };
 </script>
