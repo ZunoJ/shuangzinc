@@ -1,12 +1,24 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <vue-canvas-nest
+      :config="{ color: '102, 95, 95', count: 100 }"
+      :el="'#world'"
+    ></vue-canvas-nest>
     <router-view />
   </div>
 </template>
+
+<script>
+import vueCanvasNest from "vue-canvas-nest";
+
+export default {
+  name: "",
+  components: { vueCanvasNest },
+  data() {
+    return {};
+  }
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -16,7 +28,10 @@
   text-align: center;
   color: #2c3e50;
 }
-
+#world {
+  margin: 0;
+  background-color: #f5f7f9;
+}
 #nav {
   padding: 30px;
 
