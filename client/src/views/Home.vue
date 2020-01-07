@@ -118,6 +118,7 @@ export default {
     padding: 30px 0;
     color: #fff;
     background: #222;
+    font-weight: 600;
   }
   .sidebar-inner {
     box-sizing: border-box;
