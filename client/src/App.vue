@@ -31,6 +31,7 @@ export default {
 #world {
   margin: 0;
   background-color: #f5f7f9;
+  color: #555;
 }
 #nav {
   padding: 30px;
