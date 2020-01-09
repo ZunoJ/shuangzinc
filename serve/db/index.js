@@ -4,6 +4,17 @@ const sequelize = new Sequelize('info', 'root', '12345678root', {
     host: 'cdb-csvkp3t0.bj.tencentcdb.com',
     port:'10044',
     dialect: 'mysql',
+    //解决中文输入问题
+    define: {
+        underscored: true,
+        charset:'gbk',
+        dialectOptions: {
+            charset: "gbk",
+            collate: "gbk",
+            supportBigNumbers: true,
+            bigNumberStrings: true
+        }
+    },
     sync: { force: true },
     pool: {
         max: 5,
@@ -21,7 +32,8 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     },
     //用户账号
     useraccount: {
-        type: Sequelize.STRING(10)
+        type: Sequelize.STRING(10),
+        unique: true
     },
     //用户名
     username: {
@@ -140,13 +152,49 @@ var Comment = sequelize.define('t_comment'/*自定义表名*/, {
      ]
 })
 
+var Book = sequelize.define('t_book'/*自定义表名*/, {
+    bookid: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,       //主键
+        autoIncrement: true,    //自增
+        comment: "自增id"       //注释:只在代码中有效
+    },
+    //书籍图片
+    bookimg: {
+        type: Sequelize.INTEGER
+    },
+    //书籍URL
+    bookurl: {
+        type: Sequelize.INTEGER
+    },
+    //加入时间
+    addtime: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+    }
+}, {
+    //使用自定义表名
+    freezeTableName: true,
+    //去掉默认的添加时间和更新时间
+    timestamps: false,
+    indexes:[
+	    //普通索引,默认BTREE
+        {
+            unique: true,
+            fields: ['bookId']
+        },
+     ]
+})
+
 User.sync()
 Article.sync()
 Comment.sync()
+Book.sync()
 
 
 module.exports = {
     User,
     Article,
-    Comment
+    Comment,
+    Book
 }

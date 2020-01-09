@@ -1,11 +1,125 @@
-const User = require('../db').User
+const db = require('../db')
 
 
-const hello = async (ctx, next) => {
-    var name = ctx.params.name;
-    ctx.response.body = `<h1>Hello, ${name}!</h1>`;
+const queryArticles = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const queryComments = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const publishArticles = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const deleteArticle = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const deleteComments = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const publishComments = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const queryTags = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const addTags = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const deleteTags = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const queryBooks = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const addBooks = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
+}
+
+const deleteBooks = async (ctx, next) => {
+    let {name, sex} = ctx.request.body
+    console.log(name)
+    ctx.send({
+        status: 'success',
+        data: 'hello ikcmap'
+    })
 }
 
 module.exports = {
-    'GET /hello/:name': hello
+    'POST /api/queryArticles': queryArticles, // 查询文章
+    'POST /api/queryComments': queryComments, // 查询评论
+    'POST /api/publishArticles': publishArticles, // 发布文章
+    'POST /api/deleteArticle': deleteArticle, // 删除文章
+    'POST /api/deleteComments': deleteComments, // 删除评论
+    'POST /api/publishComments': publishComments, // 发布评论
+    'POST /api/queryTags': queryTags, // 查询标签
+    'POST /api/addTags': addTags, // 添加标签
+    'POST /api/deleteTags': deleteTags, // 删除标签
+    'POST /api/queryBooks': queryBooks, // 查询书籍
+    'POST /api/addBooks': addBooks, // 添加书籍
+    'POST /api/deleteBooks': deleteBooks // 删除书籍
 }

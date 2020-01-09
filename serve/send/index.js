@@ -1,8 +1,9 @@
 
 module.exports = () => {
-    function render(json) {
+    function render(status, msg, json) {
         this.set("Content-Type", "application/json")
-        this.body = JSON.stringify(json)
+        let resultJson = {flag:status,msg:msg || '',...json}
+        this.body = JSON.stringify(resultJson)
     }
     return async (ctx, next) => {
         ctx.send = render.bind(ctx)
