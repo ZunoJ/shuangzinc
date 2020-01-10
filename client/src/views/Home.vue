@@ -181,7 +181,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="用户头像">
-          <!-- <el-upload
+          <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
@@ -194,8 +194,7 @@
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload> -->
-          <input type="file" id="userhead" />
+          </el-upload>
         </el-form-item>
         <el-form-item label="用户标签">
           <el-input
