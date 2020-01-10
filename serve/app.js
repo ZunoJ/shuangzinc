@@ -6,6 +6,7 @@ const bodyParser = require('koa-bodyparser')
 const controller = require('./controller')
 const miLog = require('./log')
 const send = require('./send')
+const {check_token} = require('./utils/token')
 const onerror = require('koa-onerror')
 
 // 引入请求错误中间件
@@ -22,6 +23,8 @@ app.use(miLog({
 }))
 app.use(bodyParser())
 app.use(send())
+app.use(check_token)
+
 // 增加错误的监听处理
 app.on("error", (err, ctx) => {
     if (ctx && !ctx.headerSent && ctx.status < 500) {

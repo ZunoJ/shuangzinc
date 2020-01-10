@@ -52,6 +52,11 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     userhead:{
         type: Sequelize.STRING
     },
+    //用户token
+    usertoken:{
+        type: Sequelize.STRING,
+        defaultValue: ''
+    },
     //用户创建时间
     createtime: {
         type: Sequelize.DATE,
@@ -181,7 +186,36 @@ var Book = sequelize.define('t_book'/*自定义表名*/, {
 	    //普通索引,默认BTREE
         {
             unique: true,
-            fields: ['bookId']
+            fields: ['bookid']
+        },
+     ]
+})
+
+var Check = sequelize.define('t_check'/*自定义表名*/, {
+    checkid: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,       //主键
+        autoIncrement: true,    //自增
+        comment: "自增id"       //注释:只在代码中有效
+    },
+    //验证码token
+    checktoken: {
+        type: Sequelize.STRING
+    },
+    //验证码code
+    checkcode: {
+        type: Sequelize.STRING
+    }
+}, {
+    //使用自定义表名
+    freezeTableName: true,
+    //去掉默认的添加时间和更新时间
+    timestamps: false,
+    indexes:[
+	    //普通索引,默认BTREE
+        {
+            unique: true,
+            fields: ['checkid']
         },
      ]
 })
@@ -190,11 +224,13 @@ User.sync()
 Article.sync()
 Comment.sync()
 Book.sync()
+Check.sync({force:true})
 
 
 module.exports = {
     User,
     Article,
     Comment,
-    Book
+    Book,
+    Check
 }
