@@ -31,6 +31,10 @@
         <div class="sidebar-inner">
           <el-avatar shape="square" :src="squareUrl"></el-avatar>
           <p class="site-author-name">double</p>
+          <p class="site-login">
+            <a class="site-login-a" @click="loginVisible = true">注册</a>
+            <a class="site-login-a" @click="loginVisible = true">登录</a>
+          </p>
           <nav class="site-nav">
             <div class="site-state-item">
               <span>10</span>
@@ -76,7 +80,7 @@
       <div class="content-wrap">
         <div>
           <section class="posts-expand">
-            <article>
+            <!-- <article>
               <div>
                 <header>
                   <h1 class="post-title">写给聪明人</h1>
@@ -139,11 +143,100 @@
                   <div class="post-footer"></div>
                 </footer>
               </div>
-            </article>
+            </article> -->
           </section>
         </div>
       </div>
     </div>
+    <el-dialog title="登录" :visible.sync="loginVisible" width="450px" center>
+      <el-form
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        label-width="80px"
+        size="mini"
+      >
+        <el-form-item label="账号" prop="useraccount">
+          <el-input
+            v-model="loginForm.useraccount"
+            placeholder="请输入账号"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input
+            v-model="loginForm.userpwd"
+            placeholder="请输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="loginForm.reuserpwd"
+            placeholder="请再次输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input
+            v-model="loginForm.username"
+            placeholder="请输入用户昵称"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用户头像">
+          <!-- <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img
+              v-if="loginForm.userhead"
+              :src="loginForm.userhead"
+              class="avatar"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload> -->
+          <input type="file" id="userhead" />
+        </el-form-item>
+        <el-form-item label="用户标签">
+          <el-input
+            v-model="loginForm.usertags"
+            placeholder="请添加标签"
+            style="width:79%;margin-right:10px"
+            maxlength="6"
+            show-word-limit
+          ></el-input>
+          <el-button
+            type="primary"
+            @click="addTag"
+            :disabled="loginForm.tagList.length >= 5"
+            >添加</el-button
+          >
+          <el-tag
+            v-for="item in loginForm.tagList"
+            :key="item"
+            effect="dark"
+            size="mini"
+            style="margin-left:5px"
+            closable
+            @close="deleteTag(item)"
+          >
+            {{ item }}
+          </el-tag>
+        </el-form-item>
+        <el-form-item label="验证码">
+          <el-input
+            v-model="loginForm.checkcode"
+            placeholder="请输入验证码"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="loginVisible = false">取 消</el-button>
+        <el-button type="primary" @click="loginVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -153,11 +246,28 @@ export default {
   components: {},
   data() {
     return {
+      loginRules: {
+        useraccount: [
+          { required: true, message: "请输入用户账户", trigger: "blur" }
+        ]
+      },
       value1: 50,
       squareUrl:
         "https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png",
       chatVisibles: [],
-      chatBody: ""
+      chatBody: "",
+      loginVisible: false,
+      loginForm: {
+        useraccount: "",
+        userpwd: "",
+        reuserpwd: "",
+        username: "",
+        usertags: "",
+        userhead: "",
+        checktoken: "",
+        checkcode: "",
+        tagList: []
+      }
     };
   },
   methods: {
@@ -169,6 +279,35 @@ export default {
     },
     makeComment(index) {
       this.$set(this.chatVisibles, index, false);
+    },
+    addTag() {
+      if (
+        this.loginForm.usertags !== "" &&
+        this.loginForm.tagList.length <= 5
+      ) {
+        this.loginForm.tagList.push(this.loginForm.usertags);
+        this.loginForm.usertags = "";
+      }
+    },
+    deleteTag(item) {
+      this.loginForm.tagList = this.loginForm.tagList.filter(res => {
+        return res !== item;
+      });
+    },
+    handleAvatarSuccess(res, file) {
+      this.loginForm.userhead = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     }
   }
 };
@@ -269,5 +408,38 @@ export default {
     box-shadow: initial;
     border-radius: initial;
   }
+  .site-login {
+    border-top: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    .site-login-a {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 78px;
+  height: 78px;
+  line-height: 78px !important;
+  text-align: center;
+}
+.avatar {
+  width: 78px;
+  height: 78px;
+  display: block;
 }
 </style>
