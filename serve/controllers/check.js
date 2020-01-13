@@ -73,7 +73,22 @@ function makeCapcha() {
     return {checkcode:str,img}
 }
 
+// 验证码获取
+const headupload = async (ctx, next) => {
+    try {
+        ctx.send('S','上传头像成功',{
+            data:true
+        })
+    } catch(e){
+        ctx.send('F','上传头像失败',{
+            data:e
+        })
+    }
+}
+
+
 
 module.exports = {
-    'POST /api/checkcode': checkcode // 获取验证码接口
+    'POST /api/checkcode': checkcode, // 获取验证码接口
+    'POST /api/headupload': headupload // 头像上传接口
 }

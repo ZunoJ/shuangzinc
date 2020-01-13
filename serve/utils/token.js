@@ -14,8 +14,9 @@ module.exports = {
   */
   async check_token(ctx, next){
     let url = ctx.url;
-    // if(ctx.method != 'GET'  && !URL_YES_PASS.includes(url)){
-    if (true) {
+    console.log(ctx.url)
+    console.log(URL_YES_PASS)
+    if(!URL_YES_PASS.includes(url)){    
       let token = ctx.get("Authorization");
       if(token == ''){
         // 直接抛出错误

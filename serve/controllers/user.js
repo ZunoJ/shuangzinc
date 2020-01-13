@@ -133,4 +133,5 @@ const loginSystem = async (ctx, next) => {
 module.exports = {
     'POST /api/registeredMember': registeredMember, // 注册接口 
     'POST /api/loginSystem': loginSystem // 登录接口
+    
 }

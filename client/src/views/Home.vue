@@ -32,8 +32,8 @@
           <el-avatar shape="square" :src="squareUrl"></el-avatar>
           <p class="site-author-name">double</p>
           <p class="site-login">
-            <a class="site-login-a" @click="loginVisible = true">注册</a>
-            <a class="site-login-a" @click="loginVisible = true">登录</a>
+            <a class="site-login-a" @click="registerMember">注册</a>
+            <a class="site-login-a" @click="loginSys">登录</a>
           </p>
           <nav class="site-nav">
             <div class="site-state-item">
@@ -148,7 +148,13 @@
         </div>
       </div>
     </div>
-    <el-dialog title="登录" :visible.sync="loginVisible" width="450px" center>
+    <el-dialog
+      title="登录"
+      :visible.sync="loginVisible"
+      width="450px"
+      center
+      @closed="resetLogin"
+    >
       <el-form
         ref="loginForm"
         :model="loginForm"
@@ -162,28 +168,28 @@
             placeholder="请输入账号"
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="userpwd">
           <el-input
             v-model="loginForm.userpwd"
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item label="确认密码">
+        <el-form-item label="确认密码" prop="reuserpwd">
           <el-input
             v-model="loginForm.reuserpwd"
             placeholder="请再次输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称">
+        <el-form-item label="用户昵称" prop="username">
           <el-input
             v-model="loginForm.username"
             placeholder="请输入用户昵称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户头像">
+        <el-form-item label="用户头像" prop="userhead">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="/api/headupload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -196,7 +202,7 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="用户标签">
+        <el-form-item label="用户标签" prop="usertags">
           <el-input
             v-model="loginForm.usertags"
             placeholder="请添加标签"
@@ -222,11 +228,16 @@
             {{ item }}
           </el-tag>
         </el-form-item>
-        <el-form-item label="验证码">
+        <el-form-item label="验证码" prop="checkcode">
           <el-input
             v-model="loginForm.checkcode"
             placeholder="请输入验证码"
+            style="width:74%;margin-right:11px"
           ></el-input>
+          <img
+            style="height: 28px;position: absolute;cursor:pointer;"
+            :src="checkCodeImg"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -240,6 +251,8 @@
 </template>
 
 <script>
+import httpServe from "../serve/api";
+
 export default {
   name: "home",
   components: {},
@@ -248,6 +261,20 @@ export default {
       loginRules: {
         useraccount: [
           { required: true, message: "请输入用户账户", trigger: "blur" }
+        ],
+        userpwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        reuserpwd: [
+          { required: true, message: "请再次输入密码", trigger: "blur" }
+        ],
+        username: [
+          { required: true, message: "请输入用户昵称", trigger: "blur" }
+        ],
+        userhead: [{ required: true, message: "请上传头像", trigger: "blur" }],
+        usertags: [
+          { required: true, message: "请添加用户标签", trigger: "blur" }
+        ],
+        checkcode: [
+          { required: true, message: "请输入验证码", trigger: "blur" }
         ]
       },
       value1: 50,
@@ -266,7 +293,8 @@ export default {
         checktoken: "",
         checkcode: "",
         tagList: []
-      }
+      },
+      checkCodeImg: ""
     };
   },
   methods: {
@@ -307,8 +335,38 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    obtainCheckcode() {
+      httpServe.obtainCheckcode({}).then(res => {
+        if (res.flag === "S") {
+          this.checkCodeImg = res.data.img;
+        }
+      });
+    },
+    loginSys() {
+      this.obtainCheckcode();
+      this.loginVisible = true;
+    },
+    registerMember() {
+      this.obtainCheckcode();
+      this.loginVisible = true;
+    },
+    resetLogin() {
+      this.loginForm = {
+        useraccount: "",
+        userpwd: "",
+        reuserpwd: "",
+        username: "",
+        usertags: "",
+        userhead: "",
+        checktoken: "",
+        checkcode: "",
+        tagList: []
+      };
+      this.checkCodeImg = "";
     }
-  }
+  },
+  created() {}
 };
 </script>
 
