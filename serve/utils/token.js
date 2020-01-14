@@ -59,7 +59,7 @@ module.exports = {
       checkcode = checkcode.toUpperCase();
       await jwt.verify(checktoken, TOKEN_ENCODE_STR);
       // 读数据库，删除验证码
-      let res = await Check.findOne({checktoken,checkcode});
+      let res = await Check.findOne({where:{checktoken,checkcode}});
       if (res == null) {
         return false;
       } else {

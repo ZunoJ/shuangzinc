@@ -40,18 +40,21 @@ const registeredMember = async (ctx, next) => {
             }) 
             return;
         }
+        console.log(43)
         // 判断 user_id 是否重复
-        let res = await User.findAll({
+        let res = await User.findOne({
             where:{
                 useraccount
             }
         });
+        console.log(res)
         if (res.length != 0) {
             ctx.send('F','注册失败，登录账号重复了，换一个吧！',{
                 data:false
             }) 
             return;
         }
+        console.log(55)
         userpwd = sha1(sha1(userpwd + PWD_ENCODE_STR));
         // 防止xss攻击， 转义
         username = xss(username);
@@ -80,6 +83,7 @@ const registeredMember = async (ctx, next) => {
             }) 
         }
     } catch (error) {
+        console.log(83)
         ctx.send('F',error,{
             data:false
         }) 

@@ -32,8 +32,8 @@
           <el-avatar shape="square" :src="squareUrl"></el-avatar>
           <p class="site-author-name">double</p>
           <p class="site-login">
-            <a class="site-login-a" @click="registerMember">注册</a>
-            <a class="site-login-a" @click="loginSys">登录</a>
+            <a class="site-login-a" @click="showLogin('regist')">注册</a>
+            <a class="site-login-a" @click="showLogin('login')">登录</a>
           </p>
           <nav class="site-nav">
             <div class="site-state-item">
@@ -166,18 +166,22 @@
           <el-input
             v-model="loginForm.useraccount"
             placeholder="请输入账号"
+            minlength="5"
+            maxlength="10"
           ></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="userpwd">
           <el-input
             v-model="loginForm.userpwd"
             placeholder="请输入密码"
+            show-password
           ></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="reuserpwd">
           <el-input
             v-model="loginForm.reuserpwd"
             placeholder="请再次输入密码"
+            show-password
           ></el-input>
         </el-form-item>
         <el-form-item label="用户昵称" prop="username">
@@ -192,6 +196,7 @@
             action="/api/headupload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :on-change="handleAvatarChange"
             :before-upload="beforeAvatarUpload"
           >
             <img
@@ -202,7 +207,7 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="用户标签" prop="usertags">
+        <el-form-item label="用户标签" prop="tagList">
           <el-input
             v-model="loginForm.usertags"
             placeholder="请添加标签"
@@ -242,9 +247,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="loginVisible = false">取 消</el-button>
-        <el-button type="primary" @click="loginVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="registeredMember">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -252,6 +255,7 @@
 
 <script>
 import httpServe from "../serve/api";
+import { uploadImgToBase64 } from "../utils";
 
 export default {
   name: "home",
@@ -260,7 +264,11 @@ export default {
     return {
       loginRules: {
         useraccount: [
-          { required: true, message: "请输入用户账户", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入用户账户",
+            trigger: "blur"
+          }
         ],
         userpwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
         reuserpwd: [
@@ -270,8 +278,8 @@ export default {
           { required: true, message: "请输入用户昵称", trigger: "blur" }
         ],
         userhead: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        usertags: [
-          { required: true, message: "请添加用户标签", trigger: "blur" }
+        tagList: [
+          { required: true, message: "请添加用户标签", trigger: "change" }
         ],
         checkcode: [
           { required: true, message: "请输入验证码", trigger: "blur" }
@@ -307,6 +315,11 @@ export default {
     makeComment(index) {
       this.$set(this.chatVisibles, index, false);
     },
+    handleAvatarChange(file) {
+      uploadImgToBase64(file.raw).then(res => {
+        this.loginForm.userhead = res;
+      });
+    },
     addTag() {
       if (
         this.loginForm.usertags !== "" &&
@@ -340,16 +353,45 @@ export default {
       httpServe.obtainCheckcode({}).then(res => {
         if (res.flag === "S") {
           this.checkCodeImg = res.data.img;
+          this.loginForm.checktoken = res.data.checktoken;
         }
       });
     },
-    loginSys() {
+    showLogin(type) {
+      console.log(type);
       this.obtainCheckcode();
       this.loginVisible = true;
     },
-    registerMember() {
-      this.obtainCheckcode();
-      this.loginVisible = true;
+    registeredMember() {
+      const params = {
+        useraccount: this.loginForm.useraccount,
+        userpwd: this.loginForm.userpwd,
+        reuserpwd: this.loginForm.reuserpwd,
+        username: this.loginForm.username,
+        usertags: this.loginForm.tagList.join(","),
+        userhead: this.loginForm.userhead,
+        checktoken: this.loginForm.checktoken,
+        checkcode: this.loginForm.checkcode
+      };
+      console.log(params);
+      this.$refs["loginForm"].validate(valid => {
+        if (valid) {
+          if (this.loginForm.userpwd !== this.loginForm.reuserpwd) {
+            this.$message.error("两次输入密码不一致！");
+            return;
+          }
+          httpServe.registeredMember(params).then(res => {
+            if (res.flag === "S") {
+              this.$message.error("注册成功!");
+            } else {
+              this.$message.error("注册失败!");
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     resetLogin() {
       this.loginForm = {
@@ -364,6 +406,7 @@ export default {
         tagList: []
       };
       this.checkCodeImg = "";
+      this.$refs["loginForm"].resetFields();
     }
   },
   created() {}

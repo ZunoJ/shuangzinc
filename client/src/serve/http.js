@@ -2,7 +2,6 @@
  * 请求拦截、相应拦截、错误统一处理
  */
 import axios from "axios";
-import QS from "qs";
 import store from "../store/index";
 
 // 环境的切换
@@ -18,8 +17,7 @@ if (process.env.NODE_ENV == "development") {
 axios.defaults.timeout = 10000;
 
 // post请求头
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
 
 // 请求拦截器
 axios.interceptors.request.use(
@@ -112,7 +110,7 @@ export function get(url, params) {
 export function post(url, params) {
   return new Promise((resolve, reject) => {
     axios
-      .post(url, QS.stringify(params))
+      .post(url, JSON.stringify(params))
       .then(res => {
         resolve(res.data);
       })
