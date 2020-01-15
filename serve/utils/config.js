@@ -4,5 +4,5 @@ module.exports = {
     // token 加密字符串,
     TOKEN_ENCODE_STR: "zino_token_encode_str",
     // 添加无需验证
-    URL_YES_PASS: ['/api/checkcode', '/api/headupload','/api/registeredMember']
+    URL_YES_PASS: ['/api/checkcode', '/api/headupload','/api/registeredMember','/api/loginSystem']
 }

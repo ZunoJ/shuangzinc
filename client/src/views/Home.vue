@@ -12,26 +12,26 @@
           @close="handleClose"
         >
           <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航一</span>
+            <i class="el-icon-edit-outline"></i>
+            <span slot="title">我的文章</span>
           </el-menu-item>
           <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
+            <i class="el-icon-magic-stick"></i>
+            <span slot="title">我的心情</span>
           </el-menu-item>
           <el-menu-item index="3">
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">我的书屋</span>
           </el-menu-item>
           <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
+            <i class="el-icon-time"></i>
+            <span slot="title">我的经历</span>
           </el-menu-item>
         </el-menu>
         <div class="sidebar-inner">
           <el-avatar shape="square" :src="squareUrl"></el-avatar>
-          <p class="site-author-name">double</p>
-          <p class="site-login">
+          <p class="site-author-name">{{ username }}</p>
+          <p class="site-login" v-if="!isLogin">
             <a class="site-login-a" @click="showLogin('regist')">注册</a>
             <a class="site-login-a" @click="showLogin('login')">登录</a>
           </p>
@@ -149,7 +149,7 @@
       </div>
     </div>
     <el-dialog
-      title="登录"
+      :title="loginType === 'regist' ? '注册' : '登录'"
       :visible.sync="loginVisible"
       width="450px"
       center
@@ -177,20 +177,32 @@
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="reuserpwd">
+        <el-form-item
+          label="确认密码"
+          prop="reuserpwd"
+          v-if="loginType === 'regist'"
+        >
           <el-input
             v-model="loginForm.reuserpwd"
             placeholder="请再次输入密码"
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="username">
+        <el-form-item
+          label="用户昵称"
+          prop="username"
+          v-if="loginType === 'regist'"
+        >
           <el-input
             v-model="loginForm.username"
             placeholder="请输入用户昵称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户头像" prop="userhead">
+        <el-form-item
+          label="用户头像"
+          prop="userhead"
+          v-if="loginType === 'regist'"
+        >
           <el-upload
             class="avatar-uploader"
             action="/api/headupload"
@@ -207,7 +219,11 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="用户标签" prop="tagList">
+        <el-form-item
+          label="用户标签"
+          prop="tagList"
+          v-if="loginType === 'regist'"
+        >
           <el-input
             v-model="loginForm.usertags"
             placeholder="请添加标签"
@@ -242,12 +258,26 @@
           <img
             style="height: 28px;position: absolute;cursor:pointer;"
             :src="checkCodeImg"
+            @click="obtainCheckcode"
           />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="loginVisible = false">取 消</el-button>
-        <el-button type="primary" @click="registeredMember">确 定</el-button>
+        <el-button @click="loginVisible = false" size="mini">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="registeredMember"
+          v-if="loginType === 'regist'"
+          size="mini"
+          >确 定</el-button
+        >
+        <el-button
+          type="primary"
+          @click="loginSystem"
+          v-if="loginType === 'login'"
+          size="mini"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -256,12 +286,15 @@
 <script>
 import httpServe from "../serve/api";
 import { uploadImgToBase64 } from "../utils";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "home",
   components: {},
   data() {
     return {
+      isLogin: false,
+      loginType: "",
       loginRules: {
         useraccount: [
           {
@@ -288,6 +321,7 @@ export default {
       value1: 50,
       squareUrl:
         "https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png",
+      username: "",
       chatVisibles: [],
       chatBody: "",
       loginVisible: false,
@@ -305,7 +339,11 @@ export default {
       checkCodeImg: ""
     };
   },
+  computed: {
+    ...mapGetters("user", ["userInfo"])
+  },
   methods: {
+    ...mapMutations("user", ["setuserinfo"]),
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -358,9 +396,47 @@ export default {
       });
     },
     showLogin(type) {
-      console.log(type);
+      this.loginType = type;
       this.obtainCheckcode();
       this.loginVisible = true;
+    },
+    loginSystem() {
+      const params = {
+        useraccount: this.loginForm.useraccount,
+        userpwd: this.loginForm.userpwd,
+        checktoken: this.loginForm.checktoken,
+        checkcode: this.loginForm.checkcode
+      };
+      this.$refs["loginForm"].validate(valid => {
+        if (valid) {
+          httpServe.loginSystem(params).then(res => {
+            if (res.flag === "S") {
+              this.$message.success("登录成功!");
+              this.setuserinfo({
+                useraccount: res.data.useraccount,
+                username: res.data.username,
+                userhead: res.data.userhead,
+                usertoken: res.data.usertoken
+              });
+              localStorage.setItem(
+                "userinfo",
+                JSON.stringify({
+                  useraccount: res.data.useraccount,
+                  username: res.data.username,
+                  userhead: res.data.userhead,
+                  usertoken: res.data.usertoken
+                })
+              );
+              this.loginVisible = false;
+            } else {
+              this.$message.error("登录失败!");
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     registeredMember() {
       const params = {
@@ -373,7 +449,6 @@ export default {
         checktoken: this.loginForm.checktoken,
         checkcode: this.loginForm.checkcode
       };
-      console.log(params);
       this.$refs["loginForm"].validate(valid => {
         if (valid) {
           if (this.loginForm.userpwd !== this.loginForm.reuserpwd) {
@@ -382,7 +457,23 @@ export default {
           }
           httpServe.registeredMember(params).then(res => {
             if (res.flag === "S") {
-              this.$message.error("注册成功!");
+              this.$message.success("注册成功!");
+              this.setuserinfo({
+                useraccount: res.data.useraccount,
+                username: res.data.username,
+                userhead: res.data.userhead,
+                usertoken: res.data.usertoken
+              });
+              localStorage.setItem(
+                "userinfo",
+                JSON.stringify({
+                  useraccount: res.data.useraccount,
+                  username: res.data.username,
+                  userhead: res.data.userhead,
+                  usertoken: res.data.usertoken
+                })
+              );
+              this.loginVisible = false;
             } else {
               this.$message.error("注册失败!");
             }
@@ -409,7 +500,22 @@ export default {
       this.$refs["loginForm"].resetFields();
     }
   },
-  created() {}
+  watch: {
+    userInfo(newValue) {
+      if (newValue.useraccount !== "") {
+        this.isLogin = true;
+        this.squareUrl = newValue.userhead;
+        this.username = newValue.username;
+      }
+    }
+  },
+  created() {
+    if (this.userInfo.useraccount !== "") {
+      this.isLogin = true;
+      this.squareUrl = this.userInfo.userhead;
+      this.username = this.userInfo.username;
+    }
+  }
 };
 </script>
 

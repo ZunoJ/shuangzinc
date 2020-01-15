@@ -41,7 +41,7 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     },
     //用户密码
     userpwd: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
         allowNull: false,//不允许为null
     },
     //用户标签
@@ -50,7 +50,7 @@ var User = sequelize.define('t_user'/*自定义表名*/, {
     },
     //用户头像
     userhead:{
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     //用户token
     usertoken:{

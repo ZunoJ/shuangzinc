@@ -40,15 +40,15 @@ const registeredMember = async (ctx, next) => {
             }) 
             return;
         }
-        console.log(43)
+        console.log(useraccount)
         // 判断 user_id 是否重复
-        let res = await User.findOne({
+        let res = await db.User.findOne({
             where:{
                 useraccount
             }
         });
         console.log(res)
-        if (res.length != 0) {
+        if (res != null) {
             ctx.send('F','注册失败，登录账号重复了，换一个吧！',{
                 data:false
             }) 
@@ -108,23 +108,27 @@ const loginSystem = async (ctx, next) => {
             return;
         }
         userpwd = sha1(sha1(userpwd + PWD_ENCODE_STR));
-        let res = await User.findAll({useraccount,userpwd});
-        if(res.length == 0){
+        let res = await db.User.findOne({
+            where:{
+                useraccount,userpwd
+            }
+        });
+        if(res === null){
             ctx.send('F','登录失败，用户名或者密码错误!',{
                 data:false
             }) 
             return;
         }
         let token = create_token(useraccount);
-        let model = Object.assign({},res[0],{usertoken:token})
-        User.update(res[0],model)
+        
+        await db.User.update({usertoken: token}, {where: {useraccount}})
         ctx.send('S','登录成功!',{
             data:{
-                useraccount: res[0].useraccount,
-                username: res[0].username,
-                userhead: res[0].userhead,
+                useraccount: res.useraccount,
+                username: res.username,
+                userhead: res.userhead,
                 usertoken: token,
-                createtime: res[0].createtime
+                createtime: res.createtime
             }
         })
     } catch(e){

@@ -10,12 +10,23 @@
 
 <script>
 import vueCanvasNest from "vue-canvas-nest";
+import { mapMutations } from "vuex";
 
 export default {
   name: "",
   components: { vueCanvasNest },
   data() {
     return {};
+  },
+  methods: {
+    ...mapMutations("user", ["setuserinfo"])
+  },
+  created() {
+    if (localStorage.getItem("userinfo")) {
+      let userinfo = JSON.parse(localStorage.getItem("userinfo"));
+      console.log(userinfo);
+      this.setuserinfo(userinfo);
+    }
   }
 };
 </script>
