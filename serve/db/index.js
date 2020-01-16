@@ -84,7 +84,7 @@ var Article = sequelize.define('t_article'/*自定义表名*/, {
         comment: "自增id"       //注释:只在代码中有效
     },
     //用户ID
-    userid: {
+    useraccount: {
         type: Sequelize.INTEGER
     },
     //文章内容
@@ -103,6 +103,10 @@ var Article = sequelize.define('t_article'/*自定义表名*/, {
     },
     //文章简介
     articleintro: {
+        type: Sequelize.STRING
+    },
+    //文章标题
+    articletitle: {
         type: Sequelize.STRING
     }
 }, {

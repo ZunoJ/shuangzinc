@@ -48,7 +48,7 @@ const registeredMember = async (ctx, next) => {
             }
         });
         console.log(res)
-        if (res != null) {
+        if (res !== null) {
             ctx.send('F','注册失败，登录账号重复了，换一个吧！',{
                 data:false
             }) 
@@ -141,5 +141,4 @@ const loginSystem = async (ctx, next) => {
 module.exports = {
     'POST /api/registeredMember': registeredMember, // 注册接口 
     'POST /api/loginSystem': loginSystem // 登录接口
-    
 }

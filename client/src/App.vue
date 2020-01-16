@@ -24,7 +24,6 @@ export default {
   created() {
     if (localStorage.getItem("userinfo")) {
       let userinfo = JSON.parse(localStorage.getItem("userinfo"));
-      console.log(userinfo);
       this.setuserinfo(userinfo);
     }
   }

@@ -20,12 +20,32 @@ const queryComments = async (ctx, next) => {
 }
 
 const publishArticles = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {articletype = '', articletitle = '' , articleintro = "" , articlecontent = '' ,articletime = '',useraccount = ''} = ctx.request.body;
+    try {
+        if(useraccount == '' || articletype == '' || articletitle == '' || articleintro == '' || articlecontent == '' || articletime == ''){
+            ctx.send('F','发布失败，请完整输入要素。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Article.create({
+            useraccount,
+            articletype,
+            articletitle,
+            articleintro,
+            articlecontent,
+            articletime
+        })
+        if(res != null) {
+            ctx.send('S','发布成功!',{
+                data:true
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const deleteArticle = async (ctx, next) => {

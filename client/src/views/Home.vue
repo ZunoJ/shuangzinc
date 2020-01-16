@@ -1,285 +1,241 @@
 <template>
-  <div class="home">
-    <div class="content">
-      <div class="nav">
-        <div class="site-meta">
-          <span>DOUBLE's Blog</span>
-        </div>
-        <el-menu
-          default-active="1"
-          class="el-menu-vertical"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-menu-item index="1">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">我的文章</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-magic-stick"></i>
-            <span slot="title">我的心情</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">我的书屋</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-time"></i>
-            <span slot="title">我的经历</span>
-          </el-menu-item>
-        </el-menu>
-        <div class="sidebar-inner">
-          <el-avatar shape="square" :src="squareUrl"></el-avatar>
-          <p class="site-author-name">{{ username }}</p>
-          <p class="site-login" v-if="!isLogin">
-            <a class="site-login-a" @click="showLogin('regist')">注册</a>
-            <a class="site-login-a" @click="showLogin('login')">登录</a>
-          </p>
-          <nav class="site-nav">
-            <div class="site-state-item">
-              <span>10</span>
-              <p>posts</p>
+  <div class="box">
+    <el-scrollbar>
+      <div class="home">
+        <div class="content">
+          <div class="nav">
+            <div class="site-meta">
+              <span>DOUBLE's Blog</span>
             </div>
-            <el-divider direction="vertical"></el-divider>
-            <div class="site-state-item">
-              <span>10</span>
-              <p>categories</p>
-            </div>
-            <el-divider direction="vertical"></el-divider>
-            <div class="site-state-item">
-              <span>10</span>
-              <p>tags</p>
-            </div>
-            <div class="links-of-author-item">
-              <a>
-                <svg-icon icon-class="github" class-name="svg-style"></svg-icon>
-                Github
-              </a>
-              <a>
-                <svg-icon icon-class="man" class-name="svg-style"></svg-icon>
-                Medium
-              </a>
-              <a>
-                <svg-icon
-                  icon-class="zhihu"
-                  class-name="zhihu-style"
-                ></svg-icon>
-                Zhihu
-              </a>
-              <a>
-                <svg-icon
-                  icon-class="email"
-                  class-name="zhihu-style"
-                ></svg-icon>
-                E-Mail
-              </a>
-            </div>
-          </nav>
-        </div>
-      </div>
-      <div class="content-wrap">
-        <div>
-          <section class="posts-expand">
-            <!-- <article>
-              <div>
-                <header>
-                  <h1 class="post-title">写给聪明人</h1>
-                  <div class="post-meta">
-                    <span>
-                      <i class="el-icon-date"></i>
-                      Posted on 2019-01-12
-                    </span>
-                    <el-divider direction="vertical"></el-divider>
-                    <span>
-                      <i class="el-icon-folder"></i>
-                      In
-                      <a class="post-typea">Article</a>
-                    </span>
-                    <el-divider direction="vertical"></el-divider>
-                    <span>
-                      <el-popover
-                        placement="bottom"
-                        width="160"
-                        v-model="chatVisibles[index]"
-                      >
-                        <el-input type="textarea" :rows="3" v-model="chatBody">
-                        </el-input>
-                        <div
-                          style="text-align: center; margin: 0; margin-top: 10px;"
-                        >
-                          <el-button
-                            size="mini"
-                            type="text"
-                            @click="chatVisibles[index] = false"
-                            >取消</el-button
-                          >
-                          <el-button
-                            type="primary"
-                            size="mini"
-                            @click="makeComment(index)"
-                            >评论</el-button
-                          >
-                        </div>
-                        <i
-                          class="el-icon-chat-square"
-                          slot="reference"
-                          style="cursor:pointer;"
-                        ></i>
-                      </el-popover>
-                    </span>
-                  </div>
-                </header>
-                <div class="post-body">
-                  <p>
-                    从武汉，到北京，再到广州，然后是英国，一路上说难不难，说容易也不容易。我的原生家庭不太能给我提供太多帮助，于是每到一个新地方，一切都得靠自己打拼，很多东西需要自己摸索。现在慢慢静下来，就想写一篇经验性的文章，给后辈里的聪明人看。因为我想，如果你是聪明人，一定能懂得这篇文章里的含义。
-                  </p>
-                  <div class="post-button">
-                    <a class="btn">
-                      Read more »
-                    </a>
-                  </div>
+            <el-menu
+              default-active="1"
+              class="el-menu-vertical"
+              @open="handleOpen"
+              @close="handleClose"
+            >
+              <el-menu-item index="1">
+                <i class="el-icon-edit-outline"></i>
+                <span slot="title">我的文章</span>
+              </el-menu-item>
+              <el-menu-item index="2">
+                <i class="el-icon-magic-stick"></i>
+                <span slot="title">我的杂谈</span>
+              </el-menu-item>
+              <el-menu-item index="3">
+                <i class="el-icon-notebook-2"></i>
+                <span slot="title">我的书屋</span>
+              </el-menu-item>
+              <el-menu-item index="4">
+                <i class="el-icon-time"></i>
+                <span slot="title">我的经历</span>
+              </el-menu-item>
+            </el-menu>
+            <div class="sidebar-inner">
+              <el-avatar shape="square" :src="squareUrl"></el-avatar>
+              <p class="site-author-name">{{ username }}</p>
+              <p class="site-login" v-if="!isLogin">
+                <a class="site-login-a" @click="showLogin('regist')">注册</a>
+                <a class="site-login-a" @click="showLogin('login')">登录</a>
+              </p>
+              <nav class="site-nav">
+                <div class="site-state-item">
+                  <span>10</span>
+                  <p>posts</p>
                 </div>
-                <footer>
-                  <div class="post-footer"></div>
-                </footer>
-              </div>
-            </article> -->
-          </section>
+                <el-divider direction="vertical"></el-divider>
+                <div class="site-state-item">
+                  <span>10</span>
+                  <p>categories</p>
+                </div>
+                <el-divider direction="vertical"></el-divider>
+                <div class="site-state-item">
+                  <span>10</span>
+                  <p>tags</p>
+                </div>
+                <div class="links-of-author-item">
+                  <a>
+                    <svg-icon
+                      icon-class="github"
+                      class-name="svg-style"
+                    ></svg-icon>
+                    Github
+                  </a>
+                  <a>
+                    <svg-icon
+                      icon-class="man"
+                      class-name="svg-style"
+                    ></svg-icon>
+                    Medium
+                  </a>
+                  <a>
+                    <svg-icon
+                      icon-class="zhihu"
+                      class-name="zhihu-style"
+                    ></svg-icon>
+                    Zhihu
+                  </a>
+                  <a>
+                    <svg-icon
+                      icon-class="email"
+                      class-name="zhihu-style"
+                    ></svg-icon>
+                    E-Mail
+                  </a>
+                </div>
+              </nav>
+            </div>
+          </div>
+          <div class="content-wrap">
+            <div>
+              <richEditor @catchData="receivingHtml"></richEditor>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <el-dialog
-      :title="loginType === 'regist' ? '注册' : '登录'"
-      :visible.sync="loginVisible"
-      width="450px"
-      center
-      @closed="resetLogin"
-    >
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        label-width="80px"
-        size="mini"
-      >
-        <el-form-item label="账号" prop="useraccount">
-          <el-input
-            v-model="loginForm.useraccount"
-            placeholder="请输入账号"
-            minlength="5"
-            maxlength="10"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="userpwd">
-          <el-input
-            v-model="loginForm.userpwd"
-            placeholder="请输入密码"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="确认密码"
-          prop="reuserpwd"
-          v-if="loginType === 'regist'"
+        <div
+          class="el-backtop"
+          style="bottom: 100px;right: 40px;border-radius: 0;font-size: 12px;font-weight: 800;"
         >
-          <el-input
-            v-model="loginForm.reuserpwd"
-            placeholder="请再次输入密码"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户昵称"
-          prop="username"
-          v-if="loginType === 'regist'"
+          发文
+        </div>
+        <div class="el-backtop" style="bottom: 40px;right: 40px;">
+          <i class="el-icon-caret-top"></i>
+        </div>
+        <el-dialog
+          :title="loginType === 'regist' ? '注册' : '登录'"
+          :visible.sync="loginVisible"
+          width="450px"
+          center
+          @closed="resetLogin"
         >
-          <el-input
-            v-model="loginForm.username"
-            placeholder="请输入用户昵称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户头像"
-          prop="userhead"
-          v-if="loginType === 'regist'"
-        >
-          <el-upload
-            class="avatar-uploader"
-            action="/api/headupload"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :on-change="handleAvatarChange"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img
-              v-if="loginForm.userhead"
-              :src="loginForm.userhead"
-              class="avatar"
-            />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>
-        <el-form-item
-          label="用户标签"
-          prop="tagList"
-          v-if="loginType === 'regist'"
-        >
-          <el-input
-            v-model="loginForm.usertags"
-            placeholder="请添加标签"
-            style="width:79%;margin-right:10px"
-            maxlength="6"
-            show-word-limit
-          ></el-input>
-          <el-button
-            type="primary"
-            @click="addTag"
-            :disabled="loginForm.tagList.length >= 5"
-            >添加</el-button
-          >
-          <el-tag
-            v-for="item in loginForm.tagList"
-            :key="item"
-            effect="dark"
+          <el-form
+            ref="loginForm"
+            :model="loginForm"
+            :rules="loginRules"
+            label-width="80px"
             size="mini"
-            style="margin-left:5px"
-            closable
-            @close="deleteTag(item)"
           >
-            {{ item }}
-          </el-tag>
-        </el-form-item>
-        <el-form-item label="验证码" prop="checkcode">
-          <el-input
-            v-model="loginForm.checkcode"
-            placeholder="请输入验证码"
-            style="width:74%;margin-right:11px"
-          ></el-input>
-          <img
-            style="height: 28px;position: absolute;cursor:pointer;"
-            :src="checkCodeImg"
-            @click="obtainCheckcode"
-          />
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="loginVisible = false" size="mini">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="registeredMember"
-          v-if="loginType === 'regist'"
-          size="mini"
-          >确 定</el-button
-        >
-        <el-button
-          type="primary"
-          @click="loginSystem"
-          v-if="loginType === 'login'"
-          size="mini"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
+            <el-form-item label="账号" prop="useraccount">
+              <el-input
+                v-model="loginForm.useraccount"
+                placeholder="请输入账号"
+                minlength="5"
+                maxlength="10"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="userpwd">
+              <el-input
+                v-model="loginForm.userpwd"
+                placeholder="请输入密码"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="确认密码"
+              prop="reuserpwd"
+              v-if="loginType === 'regist'"
+            >
+              <el-input
+                v-model="loginForm.reuserpwd"
+                placeholder="请再次输入密码"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="用户昵称"
+              prop="username"
+              v-if="loginType === 'regist'"
+            >
+              <el-input
+                v-model="loginForm.username"
+                placeholder="请输入用户昵称"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="用户头像"
+              prop="userhead"
+              v-if="loginType === 'regist'"
+            >
+              <el-upload
+                class="avatar-uploader"
+                action="/api/headupload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :on-change="handleAvatarChange"
+                :before-upload="beforeAvatarUpload"
+              >
+                <img
+                  v-if="loginForm.userhead"
+                  :src="loginForm.userhead"
+                  class="avatar"
+                />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <el-form-item
+              label="用户标签"
+              prop="tagList"
+              v-if="loginType === 'regist'"
+            >
+              <el-input
+                v-model="loginForm.usertags"
+                placeholder="请添加标签"
+                style="width:79%;margin-right:10px"
+                maxlength="6"
+                show-word-limit
+              ></el-input>
+              <el-button
+                type="primary"
+                @click="addTag"
+                :disabled="loginForm.tagList.length >= 5"
+                >添加</el-button
+              >
+              <el-tag
+                v-for="item in loginForm.tagList"
+                :key="item"
+                effect="dark"
+                size="mini"
+                style="margin-left:5px"
+                closable
+                @close="deleteTag(item)"
+              >
+                {{ item }}
+              </el-tag>
+            </el-form-item>
+            <el-form-item label="验证码" prop="checkcode">
+              <el-input
+                v-model="loginForm.checkcode"
+                placeholder="请输入验证码"
+                style="width:74%;margin-right:11px"
+              ></el-input>
+              <img
+                style="height: 28px;position: absolute;cursor:pointer;"
+                :src="checkCodeImg"
+                @click="obtainCheckcode"
+              />
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="loginVisible = false" size="mini"
+              >取 消</el-button
+            >
+            <el-button
+              type="primary"
+              @click="registeredMember"
+              v-if="loginType === 'regist'"
+              size="mini"
+              >确 定</el-button
+            >
+            <el-button
+              type="primary"
+              @click="loginSystem"
+              v-if="loginType === 'login'"
+              size="mini"
+              >确 定</el-button
+            >
+          </span>
+        </el-dialog>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -287,10 +243,11 @@
 import httpServe from "../serve/api";
 import { uploadImgToBase64 } from "../utils";
 import { mapMutations, mapGetters } from "vuex";
+import richEditor from "../components/publishArticle";
 
 export default {
   name: "home",
-  components: {},
+  components: { richEditor },
   data() {
     return {
       isLogin: false,
@@ -498,6 +455,9 @@ export default {
       };
       this.checkCodeImg = "";
       this.$refs["loginForm"].resetFields();
+    },
+    receivingHtml(doc) {
+      console.log(doc);
     }
   },
   watch: {
@@ -520,8 +480,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box {
+  width: 100%;
+  height: 100vh;
+}
 .home {
   display: flex;
+}
+
+/deep/ .el-scrollbar {
+  height: 100%;
+}
+/deep/ .el-scrollbar__wrap {
+  overflow-y: scroll;
+  overflow-x: auto !important;
+  width: 110%;
+  height: 120%;
 }
 .content {
   width: 1100px;

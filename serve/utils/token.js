@@ -35,14 +35,14 @@ module.exports = {
             usertoken:token
           }
         });
-        if(res.length == 0){
+        if(res === null){
           ctx.send('F','登录过期，请重新登录!',{
               data:false
           })
           return;
         }
         // 保存用户账号，便于操作
-        ctx.useraccount = res[0].useraccount;
+        ctx.useraccount = res.dataValues.useraccount;
       }catch (e) {
         ctx.send('F','登录过期，请重新登录!',{
             data:false
