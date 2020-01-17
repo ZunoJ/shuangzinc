@@ -2,12 +2,33 @@ const db = require('../db')
 
 
 const queryArticles = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {useraccount, articletype} = ctx.request.body
+    try {
+        if(useraccount == '' || articletype == ''){
+            ctx.send('F','发布失败，请传入文章类型或用户账户。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Article.findAll({
+            where:{
+                useraccount,
+                articletype
+            },
+            order:[
+                "articleid"
+            ]
+        })
+        if(res != null) {
+            ctx.send('S','查询成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const queryComments = async (ctx, next) => {

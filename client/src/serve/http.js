@@ -37,6 +37,15 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     if (response.status === 200) {
+      if (response.data.msg === "登录过期，请重新登录!") {
+        store.commit("user/setuserinfo", {
+          useraccount: "",
+          username: "",
+          userhead: "",
+          usertoken: ""
+        });
+        localStorage.removeItem("userinfo");
+      }
       return Promise.resolve(response);
     } else {
       return Promise.reject(response);

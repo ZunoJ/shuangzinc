@@ -1,77 +1,179 @@
 <template>
   <div>
-    <section class="posts-expand">
-      <article>
-        <div>
-          <header>
-            <h1 class="post-title">写给聪明人</h1>
-            <div class="post-meta">
-              <span>
-                <i class="el-icon-date"></i>
-                Posted on 2019-01-12
-              </span>
-              <el-divider direction="vertical"></el-divider>
-              <span>
-                <i class="el-icon-folder"></i>
-                In
-                <a class="post-typea">Article</a>
-              </span>
-              <el-divider direction="vertical"></el-divider>
-              <span>
-                <el-popover
-                  placement="bottom"
-                  width="160"
-                  v-model="chatVisibles[index]"
-                >
-                  <el-input type="textarea" :rows="3" v-model="chatBody">
-                  </el-input>
-                  <div style="text-align: center; margin: 0; margin-top: 10px;">
-                    <el-button
+    <div v-if="showType === 1">
+      <section
+        class="posts-expand"
+        v-for="(item, index) in articleInfos"
+        :key="index"
+        id="article"
+      >
+        <article>
+          <div>
+            <header>
+              <h1 class="post-title">{{ item.articletitle }}</h1>
+              <div class="post-meta">
+                <span>
+                  <i class="el-icon-date"></i>
+                  Posted on {{ item.articletime }}
+                </span>
+                <el-divider direction="vertical"></el-divider>
+                <span>
+                  <i class="el-icon-folder"></i>
+                  In
+                  <a class="post-typea" v-if="item.articletype === 1"
+                    >Article</a
+                  >
+                  <a class="post-typea" v-if="item.articletype === 2">Essay</a>
+                </span>
+                <el-divider direction="vertical"></el-divider>
+                <span>
+                  <el-popover
+                    placement="bottom"
+                    width="160"
+                    v-model="chatVisibles[index]"
+                  >
+                    <el-input type="textarea" :rows="3" v-model="chatBody">
+                    </el-input>
+                    <div
+                      style="text-align: center; margin: 0; margin-top: 10px;"
+                    >
+                      <!-- <el-button
                       size="mini"
                       type="text"
                       @click="chatVisibles[index] = false"
                       >取消</el-button
-                    >
-                    <el-button
-                      type="primary"
-                      size="mini"
-                      @click="makeComment(index)"
-                      >评论</el-button
-                    >
-                  </div>
-                  <i
-                    class="el-icon-chat-square"
-                    slot="reference"
-                    style="cursor:pointer;"
-                  ></i>
-                </el-popover>
-              </span>
+                    > -->
+                      <el-button
+                        type="primary"
+                        size="mini"
+                        @click="makeComment(item.id)"
+                        >评论</el-button
+                      >
+                    </div>
+                    <i
+                      class="el-icon-chat-square"
+                      slot="reference"
+                      style="cursor:pointer;"
+                    ></i>
+                  </el-popover>
+                </span>
+              </div>
+            </header>
+            <div class="post-body">
+              <p>
+                {{ item.articleintro }}
+              </p>
+              <div class="post-button">
+                <a class="btn" @click="articleDetail(item.articleid)">
+                  Read more »
+                </a>
+              </div>
             </div>
-          </header>
-          <div class="post-body">
-            <p>
-              从武汉，到北京，再到广州，然后是英国，一路上说难不难，说容易也不容易。我的原生家庭不太能给我提供太多帮助，于是每到一个新地方，一切都得靠自己打拼，很多东西需要自己摸索。现在慢慢静下来，就想写一篇经验性的文章，给后辈里的聪明人看。因为我想，如果你是聪明人，一定能懂得这篇文章里的含义。
-            </p>
-            <div class="post-button">
-              <a class="btn">
-                Read more »
-              </a>
-            </div>
+            <footer>
+              <div class="post-footer"></div>
+            </footer>
           </div>
-          <footer>
-            <div class="post-footer"></div>
-          </footer>
-        </div>
-      </article>
-    </section>
+        </article>
+      </section>
+    </div>
+    <div v-if="showType === 2">
+      <div class="posts-expand">
+        <header>
+          <h1 class="post-title">{{ articleInfo.articletitle }}</h1>
+          <div class="post-meta">
+            <span>
+              <i class="el-icon-date"></i>
+              Posted on {{ articleInfo.articletime }}
+            </span>
+            <el-divider direction="vertical"></el-divider>
+            <span>
+              <i class="el-icon-folder"></i>
+              In
+              <a class="post-typea" v-if="articleInfo.articletype === 1"
+                >Article</a
+              >
+              <a class="post-typea" v-if="articleInfo.articletype === 2"
+                >Essay</a
+              >
+            </span>
+            <el-divider direction="vertical"></el-divider>
+            <span>
+              <el-popover placement="bottom" width="160" v-model="chatVisible">
+                <el-input type="textarea" :rows="3" v-model="chatBody">
+                </el-input>
+                <div style="text-align: center; margin: 0; margin-top: 10px;">
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="makeComment(articleInfo.id)"
+                    >评论</el-button
+                  >
+                </div>
+                <i
+                  class="el-icon-chat-square"
+                  slot="reference"
+                  style="cursor:pointer;"
+                ></i>
+              </el-popover>
+            </span>
+          </div>
+        </header>
+        <p v-html="articleInfo.articlecontent"></p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import httpserve from "../serve/api";
+import { mapGetters } from "vuex";
+
 export default {
   name: "selfArticle",
+  data() {
+    return {
+      articleInfos: [],
+      articleInfo: {},
+      chatVisibles: [],
+      chatVisible: false,
+      chatBody: "",
+      showType: 1 // 1 文章列表 2 文章详情
+    };
+  },
+  computed: {
+    ...mapGetters("user", ["userInfo"])
+  },
   props: {
-    msg: Array
+    articletype: String
+  },
+  methods: {
+    gettingArticles() {
+      let params = {
+        useraccount: this.userInfo.useraccount,
+        articletype: this.articletype
+      };
+      httpserve.queryArticles(params).then(res => {
+        if (res.flag === "S") {
+          this.articleInfos = res.data;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    makeComment(index) {
+      console.log(index);
+      document.getElementById("article").click();
+    },
+    // 查询文章详情
+    articleDetail(id) {
+      this.showType = 2;
+      this.articleInfo = this.articleInfos.find(item => {
+        return item.articleid === id;
+      });
+    }
+  },
+  created() {
+    this.gettingArticles();
   }
 };
 </script>
@@ -146,6 +248,7 @@ a {
     text-align: center;
   }
   .post-typea {
+    color: inherit;
     text-decoration: underline;
     cursor: pointer;
     &:hover {

@@ -87,7 +87,8 @@
           </div>
           <div class="content-wrap">
             <div>
-              <richEditor @catchData="receivingHtml"></richEditor>
+              <richEditor @catchData="receivingHtml" v-if="false"></richEditor>
+              <selfArticle :articletype="articletype"></selfArticle>
             </div>
           </div>
         </div>
@@ -244,13 +245,15 @@ import httpServe from "../serve/api";
 import { uploadImgToBase64 } from "../utils";
 import { mapMutations, mapGetters } from "vuex";
 import richEditor from "../components/publishArticle";
+import selfArticle from "../components/selfArticle";
 
 export default {
   name: "home",
-  components: { richEditor },
+  components: { richEditor, selfArticle },
   data() {
     return {
       isLogin: false,
+      articletype: "2",
       loginType: "",
       loginRules: {
         useraccount: [

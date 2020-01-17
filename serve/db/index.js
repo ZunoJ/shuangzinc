@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('info', 'root', '12345678root', {
-    host: 'cdb-csvkp3t0.bj.tencentcdb.com',
-    port:'10044',
+const sequelize = new Sequelize('info', 'root', '709692126a', {
+    host: 'cdb-0fhntbns.bj.tencentcdb.com',
+    port:'10126',
     dialect: 'mysql',
     //解决中文输入问题
     define: {
@@ -98,8 +98,7 @@ var Article = sequelize.define('t_article'/*自定义表名*/, {
     },
     //发布时间
     articletime: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.STRING
     },
     //文章简介
     articleintro: {
