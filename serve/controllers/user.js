@@ -74,6 +74,7 @@ const registeredMember = async (ctx, next) => {
                     username: res.username,
                     userhead: res.userhead,
                     usertoken: res.usertoken,
+                    usertags: res.usertags,
                     createtime: res.createtime
                 }
             })
@@ -122,12 +123,27 @@ const loginSystem = async (ctx, next) => {
         let token = create_token(useraccount);
         
         await db.User.update({usertoken: token}, {where: {useraccount}})
+        let articles = await db.Article.findAll({
+            where:{
+                useraccount,
+                articletype: "1"
+            }
+        })
+        let essays = await db.Article.findAll({
+            where:{
+                useraccount,
+                articletype: "2"
+            }
+        })
         ctx.send('S','登录成功!',{
             data:{
                 useraccount: res.useraccount,
                 username: res.username,
                 userhead: res.userhead,
                 usertoken: token,
+                usertags: res.usertags,
+                articles: articles.length,
+                essays: essays.length,
                 createtime: res.createtime
             }
         })

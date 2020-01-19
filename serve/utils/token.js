@@ -14,8 +14,6 @@ module.exports = {
   */
   async check_token(ctx, next){
     let url = ctx.url;
-    console.log(ctx.url)
-    console.log(URL_YES_PASS)
     if(!URL_YES_PASS.includes(url)){    
       let token = ctx.get("Authorization");
       if(token == ''){

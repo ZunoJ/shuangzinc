@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box" ref="roll">
     <el-scrollbar>
       <div class="home">
         <div class="content">
@@ -7,25 +7,20 @@
             <div class="site-meta">
               <span>DOUBLE's Blog</span>
             </div>
-            <el-menu
-              default-active="1"
-              class="el-menu-vertical"
-              @open="handleOpen"
-              @close="handleClose"
-            >
-              <el-menu-item index="1">
+            <el-menu default-active="1" class="el-menu-vertical">
+              <el-menu-item index="1" @click="menuOpen('1')">
                 <i class="el-icon-edit-outline"></i>
                 <span slot="title">我的文章</span>
               </el-menu-item>
-              <el-menu-item index="2">
+              <el-menu-item index="2" @click="menuOpen('2')">
                 <i class="el-icon-magic-stick"></i>
                 <span slot="title">我的杂谈</span>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="3" @click="menuOpen('3')">
                 <i class="el-icon-notebook-2"></i>
                 <span slot="title">我的书屋</span>
               </el-menu-item>
-              <el-menu-item index="4">
+              <el-menu-item index="4" @click="menuOpen('4')">
                 <i class="el-icon-time"></i>
                 <span slot="title">我的经历</span>
               </el-menu-item>
@@ -39,17 +34,17 @@
               </p>
               <nav class="site-nav">
                 <div class="site-state-item">
-                  <span>10</span>
-                  <p>posts</p>
+                  <span>{{ articles }}</span>
+                  <p>articles</p>
                 </div>
                 <el-divider direction="vertical"></el-divider>
                 <div class="site-state-item">
-                  <span>10</span>
-                  <p>categories</p>
+                  <span>{{ essays }}</span>
+                  <p>essays</p>
                 </div>
                 <el-divider direction="vertical"></el-divider>
                 <div class="site-state-item">
-                  <span>10</span>
+                  <span>{{ tags }}</span>
                   <p>tags</p>
                 </div>
                 <div class="links-of-author-item">
@@ -87,18 +82,32 @@
           </div>
           <div class="content-wrap">
             <div>
-              <richEditor @catchData="receivingHtml" v-if="false"></richEditor>
-              <selfArticle :articletype="articletype"></selfArticle>
+              <richEditor
+                @catchData="receivingHtml"
+                v-if="pagetType === '5'"
+              ></richEditor>
+              <selfArticle
+                :articletype.sync="pagetType"
+                v-if="pagetType === '1' || pagetType === '2'"
+              ></selfArticle>
+              <bookHome v-if="pagetType === '3'"></bookHome>
+              <selfResume v-if="pagetType === '4'"></selfResume>
             </div>
           </div>
         </div>
         <div
           class="el-backtop"
           style="bottom: 100px;right: 40px;border-radius: 0;font-size: 12px;font-weight: 800;"
+          @click="pagetType = '5'"
         >
           发文
         </div>
-        <div class="el-backtop" style="bottom: 40px;right: 40px;">
+        <div
+          class="el-backtop"
+          style="bottom: 40px;right: 40px;"
+          v-if="btnFlag"
+          @click="backTop"
+        >
           <i class="el-icon-caret-top"></i>
         </div>
         <el-dialog
@@ -246,14 +255,17 @@ import { uploadImgToBase64 } from "../utils";
 import { mapMutations, mapGetters } from "vuex";
 import richEditor from "../components/publishArticle";
 import selfArticle from "../components/selfArticle";
+import bookHome from "../components/bookHome";
+import selfResume from "../components/selfResume";
 
 export default {
   name: "home",
-  components: { richEditor, selfArticle },
+  components: { richEditor, selfArticle, bookHome, selfResume },
   data() {
     return {
       isLogin: false,
-      articletype: "2",
+      pagetType: "1", // 发文 5 看文 1 杂谈 2 书屋 3 经历 4
+      btnFlag: false,
       loginType: "",
       loginRules: {
         useraccount: [
@@ -296,7 +308,11 @@ export default {
         checkcode: "",
         tagList: []
       },
-      checkCodeImg: ""
+      checkCodeImg: "",
+      rollBox: {},
+      essays: "",
+      articles: "",
+      tags: ""
     };
   },
   computed: {
@@ -304,11 +320,8 @@ export default {
   },
   methods: {
     ...mapMutations("user", ["setuserinfo"]),
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    menuOpen(index) {
+      this.pagetType = index;
     },
     makeComment(index) {
       this.$set(this.chatVisibles, index, false);
@@ -376,7 +389,10 @@ export default {
                 useraccount: res.data.useraccount,
                 username: res.data.username,
                 userhead: res.data.userhead,
-                usertoken: res.data.usertoken
+                usertoken: res.data.usertoken,
+                essays: res.data.essays,
+                articles: res.data.articles,
+                tags: res.data.usertags.split(",").length
               });
               localStorage.setItem(
                 "userinfo",
@@ -384,7 +400,10 @@ export default {
                   useraccount: res.data.useraccount,
                   username: res.data.username,
                   userhead: res.data.userhead,
-                  usertoken: res.data.usertoken
+                  usertoken: res.data.usertoken,
+                  essays: res.data.essays,
+                  articles: res.data.articles,
+                  tags: res.data.usertags.split(",").length
                 })
               );
               this.loginVisible = false;
@@ -422,7 +441,10 @@ export default {
                 useraccount: res.data.useraccount,
                 username: res.data.username,
                 userhead: res.data.userhead,
-                usertoken: res.data.usertoken
+                usertoken: res.data.usertoken,
+                essays: "0",
+                articles: "0",
+                tags: res.data.usertags.split(",").length
               });
               localStorage.setItem(
                 "userinfo",
@@ -430,7 +452,10 @@ export default {
                   useraccount: res.data.useraccount,
                   username: res.data.username,
                   userhead: res.data.userhead,
-                  usertoken: res.data.usertoken
+                  usertoken: res.data.usertoken,
+                  essays: "0",
+                  articles: "0",
+                  tags: res.data.usertags.split(",").length
                 })
               );
               this.loginVisible = false;
@@ -461,6 +486,34 @@ export default {
     },
     receivingHtml(doc) {
       console.log(doc);
+    },
+    // 点击图片回到顶部方法，加计时器是为了过渡顺滑
+    backTop() {
+      const that = this;
+      let timer = setInterval(() => {
+        let ispeed = Math.floor(-that.scrollTop / 5);
+        document.getElementsByClassName(
+          "el-scrollbar__wrap"
+        )[0].scrollTop = document.getElementsByClassName(
+          "el-scrollbar__wrap"
+        )[0].scrollTop = that.scrollTop + ispeed;
+        if (that.scrollTop === 0) {
+          clearInterval(timer);
+        }
+      }, 16);
+    },
+    // 为了计算距离顶部的高度，当高度大于60显示回顶部图标，小于60则隐藏
+    scrollToTop() {
+      const that = this;
+      let scrollTop =
+        document.getElementsByClassName("el-scrollbar__wrap")[0].pageYOffset ||
+        document.getElementsByClassName("el-scrollbar__wrap")[0].scrollTop;
+      that.scrollTop = scrollTop;
+      if (that.scrollTop > 60) {
+        that.btnFlag = true;
+      } else {
+        that.btnFlag = false;
+      }
     }
   },
   watch: {
@@ -477,7 +530,20 @@ export default {
       this.isLogin = true;
       this.squareUrl = this.userInfo.userhead;
       this.username = this.userInfo.username;
+      this.tags = this.userInfo.tags;
+      this.articles = this.userInfo.articles;
+      this.essays = this.userInfo.essays;
     }
+  },
+  destroyed() {
+    document
+      .getElementsByClassName("el-scrollbar__wrap")[0]
+      .removeEventListener("scroll", this.scrollToTop);
+  },
+  mounted() {
+    document
+      .getElementsByClassName("el-scrollbar__wrap")[0]
+      .addEventListener("scroll", this.scrollToTop);
   }
 };
 </script>
@@ -498,7 +564,7 @@ export default {
   overflow-y: scroll;
   overflow-x: auto !important;
   width: 110%;
-  height: 120%;
+  height: 100%;
 }
 .content {
   width: 1100px;

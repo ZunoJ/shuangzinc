@@ -46,7 +46,7 @@
                       <el-button
                         type="primary"
                         size="mini"
-                        @click="makeComment(item.id)"
+                        @click="makeComment(item.articleid)"
                         >评论</el-button
                       >
                     </div>
@@ -105,7 +105,7 @@
                   <el-button
                     type="primary"
                     size="mini"
-                    @click="makeComment(articleInfo.id)"
+                    @click="makeComment(articleInfo.articleid)"
                     >评论</el-button
                   >
                 </div>
@@ -118,7 +118,10 @@
             </span>
           </div>
         </header>
-        <p v-html="articleInfo.articlecontent"></p>
+        <p
+          v-html="articleInfo.articlecontent"
+          style="text-align: -webkit-auto;line-height: 28px;"
+        ></p>
       </div>
     </div>
   </div>
@@ -162,7 +165,7 @@ export default {
     },
     makeComment(index) {
       console.log(index);
-      document.getElementById("article").click();
+      document.getElementById("app").click();
     },
     // 查询文章详情
     articleDetail(id) {
@@ -170,6 +173,11 @@ export default {
       this.articleInfo = this.articleInfos.find(item => {
         return item.articleid === id;
       });
+    }
+  },
+  watch: {
+    articletype() {
+      this.gettingArticles();
     }
   },
   created() {

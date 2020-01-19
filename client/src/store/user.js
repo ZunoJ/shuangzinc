@@ -5,7 +5,10 @@ export default {
       useraccount: "",
       username: "",
       userhead: "",
-      usertoken: ""
+      usertoken: "",
+      articles: "",
+      essays: "",
+      tags: ""
     }
   },
   getters: {
