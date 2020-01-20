@@ -206,6 +206,12 @@ export default {
       httpserve.publishComments(params).then(res => {
         if (res.flag === "S") {
           this.$message.success("发布成功");
+          this.comments.push({
+            useraccount: this.userInfo.useraccount,
+            articleid: id,
+            commentcontent: this.chatBody,
+            commenttime: moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+          });
         } else {
           this.$message.error(res.msg);
         }
