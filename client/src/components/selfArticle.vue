@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div v-if="showType === 1">
+    <div style="height: 620px;display: flex;" v-if="!isHas">
+      <div style="margin: auto;">
+        <i class="el-icon-edit" style="font-size:50px;"></i>
+        <p v-if="articletype == 1">还没有发表文章，可以先去发表文章哦~</p>
+        <p v-if="articletype == 2">还没有发表杂谈，可以先去发表杂谈哦~</p>
+      </div>
+    </div>
+    <div v-if="showType === 1 && isHas">
       <section
         class="posts-expand"
         v-for="(item, index) in articleInfos"
@@ -76,7 +83,7 @@
         </article>
       </section>
     </div>
-    <div v-if="showType === 2">
+    <div v-if="showType === 2 && isHas">
       <div class="posts-expand">
         <header>
           <h1 class="post-title">{{ articleInfo.articletitle }}</h1>
@@ -122,6 +129,21 @@
           v-html="articleInfo.articlecontent"
           style="text-align: -webkit-auto;line-height: 28px;"
         ></p>
+        <div class="post-footer"></div>
+        <div
+          style="text-align: left;padding: 10px 0;"
+          v-for="(item, index) of comments"
+          :key="index"
+        >
+          <span>一只肥龙猫</span>
+          <span
+            style="display: inline-block;margin-left: 15px;font-size: 12px;color: #999;"
+            >{{ item.commenttime }}</span
+          >
+          <p style="line-height: 28px;font-size: 14px;">
+            {{ item.commentcontent }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -130,6 +152,7 @@
 <script>
 import httpserve from "../serve/api";
 import { mapGetters } from "vuex";
+import * as moment from "moment";
 
 export default {
   name: "selfArticle",
@@ -140,7 +163,9 @@ export default {
       chatVisibles: [],
       chatVisible: false,
       chatBody: "",
-      showType: 1 // 1 文章列表 2 文章详情
+      showType: 1, // 1 文章列表 2 文章详情
+      isHas: true, // 是否有文章
+      comments: [] // 评价列表
     };
   },
   computed: {
@@ -158,13 +183,34 @@ export default {
       httpserve.queryArticles(params).then(res => {
         if (res.flag === "S") {
           this.articleInfos = res.data;
+          if (this.articleInfos.length > 0) {
+            this.isHas = true;
+          } else {
+            this.isHas = false;
+          }
         } else {
           this.$message.error(res.msg);
         }
       });
     },
-    makeComment(index) {
-      console.log(index);
+    makeComment(id) {
+      if (this.chatBody.trim() == "") {
+        this.$message.warning("请输入评论");
+        return;
+      }
+      let params = {
+        useraccount: this.userInfo.useraccount,
+        articleid: id,
+        commentcontent: this.chatBody
+      };
+      httpserve.publishComments(params).then(res => {
+        if (res.flag === "S") {
+          this.$message.success("发布成功");
+        } else {
+          this.$message.error(res.msg);
+        }
+        this.chatBody = "";
+      });
       document.getElementById("app").click();
     },
     // 查询文章详情
@@ -173,10 +219,30 @@ export default {
       this.articleInfo = this.articleInfos.find(item => {
         return item.articleid === id;
       });
+      this.queryComments(id);
+    },
+    queryComments(id) {
+      let params = {
+        articleid: id
+      };
+      httpserve.queryComments(params).then(res => {
+        if (res.flag === "S") {
+          this.comments = res.data;
+          this.comments.map(item => {
+            return (item.commenttime = moment(
+              new Date(item.commenttime)
+            ).format("YYYY-MM-DD hh:mm:ss"));
+          });
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     }
   },
   watch: {
     articletype() {
+      this.isHas = true;
+      this.showType = 1;
       this.gettingArticles();
     }
   },

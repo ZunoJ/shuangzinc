@@ -83,7 +83,7 @@ var Article = sequelize.define('t_article'/*自定义表名*/, {
         autoIncrement: true,    //自增
         comment: "自增id"       //注释:只在代码中有效
     },
-    //用户ID
+    //用户账号
     useraccount: {
         type: Sequelize.INTEGER
     },
@@ -129,8 +129,8 @@ var Comment = sequelize.define('t_comment'/*自定义表名*/, {
         autoIncrement: true,    //自增
         comment: "自增id"       //注释:只在代码中有效
     },
-    //用户ID
-    userid: {
+    //用户账号
+    useraccount: {
         type: Sequelize.INTEGER
     },
     //文章ID

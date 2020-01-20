@@ -33,22 +33,24 @@
                 <a class="site-login-a" @click="showLogin('login')">登录</a>
               </p>
               <nav class="site-nav">
-                <div class="site-state-item">
-                  <span>{{ articles }}</span>
-                  <p>articles</p>
-                </div>
-                <el-divider direction="vertical"></el-divider>
-                <div class="site-state-item">
-                  <span>{{ essays }}</span>
-                  <p>essays</p>
-                </div>
-                <el-divider direction="vertical"></el-divider>
-                <div class="site-state-item">
-                  <span>{{ tags }}</span>
-                  <p>tags</p>
+                <div v-if="isLogin">
+                  <div class="site-state-item" @click="menuOpen('1')">
+                    <span>{{ articles }}</span>
+                    <p>articles</p>
+                  </div>
+                  <el-divider direction="vertical"></el-divider>
+                  <div class="site-state-item" @click="menuOpen('2')">
+                    <span>{{ essays }}</span>
+                    <p>essays</p>
+                  </div>
+                  <el-divider direction="vertical"></el-divider>
+                  <div class="site-state-item">
+                    <span>{{ tags }}</span>
+                    <p>tags</p>
+                  </div>
                 </div>
                 <div class="links-of-author-item">
-                  <a>
+                  <a href="https://github.com/ZunoJ" target="_blank">
                     <svg-icon
                       icon-class="github"
                       class-name="svg-style"
@@ -406,6 +408,12 @@ export default {
                   tags: res.data.usertags.split(",").length
                 })
               );
+              this.isLogin = true;
+              this.squareUrl = this.userInfo.userhead;
+              this.username = this.userInfo.username;
+              this.tags = this.userInfo.tags;
+              this.articles = this.userInfo.articles;
+              this.essays = this.userInfo.essays;
               this.loginVisible = false;
             } else {
               this.$message.error("登录失败!");
@@ -458,6 +466,12 @@ export default {
                   tags: res.data.usertags.split(",").length
                 })
               );
+              this.isLogin = true;
+              this.squareUrl = this.userInfo.userhead;
+              this.username = this.userInfo.username;
+              this.tags = this.userInfo.tags;
+              this.articles = this.userInfo.articles;
+              this.essays = this.userInfo.essays;
               this.loginVisible = false;
             } else {
               this.$message.error("注册失败!");

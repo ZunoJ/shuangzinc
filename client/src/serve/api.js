@@ -5,5 +5,7 @@ export default {
   registeredMember: p => post("/api/registeredMember", p), // 用户注册
   loginSystem: p => post("/api/loginSystem", p), // 用户登录
   publishArticles: p => post("/api/publishArticles", p), // 发布文章
-  queryArticles: p => post("/api/queryArticles", p) // 查询文章
+  queryArticles: p => post("/api/queryArticles", p), // 查询文章
+  publishComments: p => post("/api/publishComments", p), // 发布评论
+  queryComments: p => post("/api/queryComments", p) // 查询评论
 };

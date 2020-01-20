@@ -2,7 +2,7 @@ const db = require('../db')
 
 
 const queryArticles = async (ctx, next) => {
-    let {useraccount, articletype} = ctx.request.body
+    let {useraccount = '', articletype = ''} = ctx.request.body
     try {
         if(useraccount == '' || articletype == ''){
             ctx.send('F','发布失败，请传入文章类型或用户账户。',{
@@ -32,12 +32,32 @@ const queryArticles = async (ctx, next) => {
 }
 
 const queryComments = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {articleid = ''} = ctx.request.body
+    try {
+        if(articleid == ''){
+            ctx.send('F','发布失败，请传入文章ID。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Comment.findAll({
+            where:{
+                articleid
+            },
+            order:[
+                "articleid"
+            ]
+        })
+        if(res != null) {
+            ctx.send('S','查询成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const publishArticles = async (ctx, next) => {
@@ -70,30 +90,82 @@ const publishArticles = async (ctx, next) => {
 }
 
 const deleteArticle = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {articleid = '', useraccount = ''} = ctx.request.body
+    try {
+        if(useraccount == '' || articleid == ''){
+            ctx.send('F','发布失败，请传入文章ID或用户账户。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Article.destroy({
+            where:{
+                useraccount,
+                articleid
+            }})
+        if(res != null) {
+            ctx.send('S','删除成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const deleteComments = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {commentid = '', useraccount = ''} = ctx.request.body
+    try {
+        if(useraccount == '' || commentid == ''){
+            ctx.send('F','发布失败，请传入评价ID或用户账户。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Comment.destroy({
+            where:{
+                useraccount,
+                commentid
+            }
+        })
+        if(res != null) {
+            ctx.send('S','删除成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const publishComments = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {useraccount = '', articleid = '', commentcontent = ''} = ctx.request.body
+    try {
+        if(useraccount == '' || articleid == '' || commentcontent == ''){
+            ctx.send('F','发布失败，请完整输入要素。',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Comment.create({
+            useraccount,
+            articleid,
+            commentcontent
+        })
+        if(res != null) {
+            ctx.send('S','发布成功!',{
+                data:true
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const queryTags = async (ctx, next) => {
