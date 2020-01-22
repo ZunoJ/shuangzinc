@@ -7,5 +7,7 @@ export default {
   publishArticles: p => post("/api/publishArticles", p), // 发布文章
   queryArticles: p => post("/api/queryArticles", p), // 查询文章
   publishComments: p => post("/api/publishComments", p), // 发布评论
-  queryComments: p => post("/api/queryComments", p) // 查询评论
+  queryComments: p => post("/api/queryComments", p), // 查询评论
+  addBooks: p => post("/api/addBooks", p), // 添加书籍
+  queryBooks: p => post("/api/queryBooks", p) // 查询书籍
 };

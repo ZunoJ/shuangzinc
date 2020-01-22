@@ -76,11 +76,11 @@ function makeCapcha() {
 // 验证码获取
 const headupload = async (ctx, next) => {
     try {
-        ctx.send('S','上传头像成功',{
+        ctx.send('S','上传图片成功',{
             data:true
         })
     } catch(e){
-        ctx.send('F','上传头像失败',{
+        ctx.send('F','上传图片失败',{
             data:e
         })
     }

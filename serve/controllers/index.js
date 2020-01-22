@@ -35,7 +35,7 @@ const queryComments = async (ctx, next) => {
     let {articleid = ''} = ctx.request.body
     try {
         if(articleid == ''){
-            ctx.send('F','发布失败，请传入文章ID。',{
+            ctx.send('F','查询评论失败！',{
                 data:false
             }) 
             return;
@@ -196,21 +196,56 @@ const deleteTags = async (ctx, next) => {
 }
 
 const queryBooks = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    try {
+        let res = await db.Book.findAll({
+            where:{
+            },
+            order:[
+                "bookid"
+            ]
+        })
+        if(res != null) {
+            ctx.send('S','查询成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const addBooks = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {useraccount = '', bookimg = '', bookurl = '', bookname = ''} = ctx.request.body
+    try {
+        if(useraccount == '' || bookimg == '' || bookurl == '' || bookname == ''){
+            ctx.send('F','发布失败，请完整输入要素。',{
+                data:false
+            }) 
+            return;
+        }
+        if(useraccount != '709692126'){
+            ctx.send('F','您没有权限！',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Book.create({
+            bookimg,
+            bookurl,
+            bookname
+        })
+        if(res != null) {
+            ctx.send('S','新增成功!',{
+                data:true
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 const deleteBooks = async (ctx, next) => {

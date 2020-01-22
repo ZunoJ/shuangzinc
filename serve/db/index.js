@@ -168,12 +168,16 @@ var Book = sequelize.define('t_book'/*自定义表名*/, {
         comment: "自增id"       //注释:只在代码中有效
     },
     //书籍图片
+    bookname: {
+        type: Sequelize.STRING
+    },
+    //书籍图片
     bookimg: {
-        type: Sequelize.INTEGER
+        type: Sequelize.LONGTEXT
     },
     //书籍URL
     bookurl: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     //加入时间
     addtime: {
@@ -226,7 +230,7 @@ var Check = sequelize.define('t_check'/*自定义表名*/, {
 User.sync()
 Article.sync()
 Comment.sync()
-Book.sync()
+Book.sync({force:true})
 Check.sync({force:true})
 
 
