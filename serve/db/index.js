@@ -173,7 +173,7 @@ var Book = sequelize.define('t_book'/*自定义表名*/, {
     },
     //书籍图片
     bookimg: {
-        type: Sequelize.LONGTEXT
+        type: Sequelize.TEXT
     },
     //书籍URL
     bookurl: {
@@ -230,7 +230,7 @@ var Check = sequelize.define('t_check'/*自定义表名*/, {
 User.sync()
 Article.sync()
 Comment.sync()
-Book.sync({force:true})
+Book.sync()
 Check.sync({force:true})
 
 
