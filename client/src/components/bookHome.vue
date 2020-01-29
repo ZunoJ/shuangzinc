@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 620px;display: flex;">
+    <div style="height: 620px;display: flex;" v-if="books.length === 0">
       <div style="margin: auto;">
         <i class="el-icon-edit" style="font-size:50px;"></i>
         <p>还没有上传书籍，可以通知管理员上传哦~</p>
@@ -9,7 +9,27 @@
         >
       </div>
     </div>
-    <div></div>
+    <div v-else>
+      <ul style="list-style: none;padding: 0px;display: flex;flex-wrap: wrap;">
+        <li
+          v-for="(item, index) of books"
+          :key="index"
+          style="display:inline-block;padding-right: 50px;font-size: 14px;"
+        >
+          <img
+            :src="item.bookimg"
+            style="width:110px;height:150px;margin-bottom: 15px;"
+            title="上海鲜花港 - 郁金香"
+          />
+          <a
+            style="cursor: pointer;display: block;text-decoration: none;color: #665f5f;"
+            :href="item.bookurl"
+            target="_blank"
+            >{{ item.bookname }}</a
+          >
+        </li>
+      </ul>
+    </div>
     <el-dialog
       title="新增书籍"
       :visible.sync="bookVisible"
@@ -85,7 +105,8 @@ export default {
         bookimg: [
           { required: true, message: "请上传书籍图片", trigger: "blur" }
         ]
-      }
+      },
+      books: []
     };
   },
   props: [], // 接收父组件的方法
@@ -108,7 +129,9 @@ export default {
     },
     queryBooks() {
       httpserve.queryBooks().then(res => {
-        console.log(res);
+        if (res.flag === "S") {
+          this.books = res.data;
+        }
       });
     },
     resetbook() {
