@@ -29,6 +29,9 @@
           >
         </li>
       </ul>
+      <el-button type="primary" @click="bookVisible = true" size="mini"
+        >上传书籍</el-button
+      >
     </div>
     <el-dialog
       title="新增书籍"
@@ -54,6 +57,12 @@
           <el-input
             v-model="bookForm.bookurl"
             placeholder="请输入书籍链接"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="书籍密码" prop="bookPassWord">
+          <el-input
+            v-model="bookForm.bookPassWord"
+            placeholder="请输入书籍密码"
           ></el-input>
         </el-form-item>
         <el-form-item label="书籍图片" prop="bookimg">
@@ -94,7 +103,7 @@ export default {
   data() {
     return {
       bookVisible: false,
-      bookForm: { bookimg: "", bookurl: "", bookname: "" },
+      bookForm: { bookimg: "", bookurl: "", bookname: "", bookPassWord: "" },
       bookRules: {
         bookname: [
           { required: true, message: "请输入书籍名称", trigger: "blur" }
@@ -103,6 +112,9 @@ export default {
           { required: true, message: "请输入书籍链接", trigger: "blur" }
         ],
         bookimg: [
+          { required: true, message: "请上传书籍图片", trigger: "blur" }
+        ],
+        bookPassWord: [
           { required: true, message: "请上传书籍图片", trigger: "blur" }
         ]
       },

@@ -164,7 +164,7 @@ export default {
       chatVisible: false,
       chatBody: "",
       showType: 1, // 1 文章列表 2 文章详情
-      isHas: true, // 是否有文章
+      isHas: false, // 是否有文章
       comments: [] // 评价列表
     };
   },
@@ -190,6 +190,9 @@ export default {
           }
         } else {
           this.$message.error(res.msg);
+          if (res.msg === "你还没有登录，快去登录吧!") {
+            this.$emit("offline");
+          }
         }
       });
     },
@@ -247,7 +250,7 @@ export default {
   },
   watch: {
     articletype() {
-      this.isHas = true;
+      this.isHas = false;
       this.showType = 1;
       this.gettingArticles();
     }

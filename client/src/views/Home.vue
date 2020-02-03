@@ -90,6 +90,7 @@
               ></richEditor>
               <selfArticle
                 :articletype.sync="pagetType"
+                @offline="isLogin = false"
                 v-if="pagetType === '1' || pagetType === '2'"
               ></selfArticle>
               <bookHome v-if="pagetType === '3'"></bookHome>
