@@ -4,83 +4,89 @@
       <div class="home">
         <div class="content">
           <div class="nav">
-            <div class="site-meta">
-              <span>DOUBLE's Blog</span>
-            </div>
-            <el-menu default-active="1" class="el-menu-vertical">
-              <el-menu-item index="1" @click="menuOpen('1')">
-                <i class="el-icon-edit-outline"></i>
-                <span slot="title">我的文章</span>
-              </el-menu-item>
-              <el-menu-item index="2" @click="menuOpen('2')">
-                <i class="el-icon-magic-stick"></i>
-                <span slot="title">我的杂谈</span>
-              </el-menu-item>
-              <el-menu-item index="3" @click="menuOpen('3')">
-                <i class="el-icon-notebook-2"></i>
-                <span slot="title">我的书屋</span>
-              </el-menu-item>
-              <el-menu-item index="4" @click="menuOpen('4')">
-                <i class="el-icon-time"></i>
-                <span slot="title">我的经历</span>
-              </el-menu-item>
-            </el-menu>
-            <div class="sidebar-inner">
-              <el-avatar shape="square" :src="squareUrl"></el-avatar>
-              <p class="site-author-name">{{ username }}</p>
-              <p class="site-login" v-if="!isLogin">
-                <a class="site-login-a" @click="showLogin('regist')">注册</a>
-                <a class="site-login-a" @click="showLogin('login')">登录</a>
-              </p>
-              <nav class="site-nav">
-                <div v-if="isLogin">
-                  <div class="site-state-item" @click="menuOpen('1')">
-                    <span>{{ articles }}</span>
-                    <p>articles</p>
-                  </div>
-                  <el-divider direction="vertical"></el-divider>
-                  <div class="site-state-item" @click="menuOpen('2')">
-                    <span>{{ essays }}</span>
-                    <p>essays</p>
-                  </div>
-                  <el-divider direction="vertical"></el-divider>
-                  <div class="site-state-item">
-                    <span>{{ tags }}</span>
-                    <p>tags</p>
-                  </div>
+            <transition appear appear-to-class="animated fadeInDown">
+              <div>
+                <div class="site-meta">
+                  <span>DOUBLE's Blog</span>
                 </div>
-                <div class="links-of-author-item">
-                  <a href="https://github.com/ZunoJ" target="_blank">
-                    <svg-icon
-                      icon-class="github"
-                      class-name="svg-style"
-                    ></svg-icon>
-                    Github
-                  </a>
-                  <a>
-                    <svg-icon
-                      icon-class="man"
-                      class-name="svg-style"
-                    ></svg-icon>
-                    Medium
-                  </a>
-                  <a>
-                    <svg-icon
-                      icon-class="zhihu"
-                      class-name="zhihu-style"
-                    ></svg-icon>
-                    Zhihu
-                  </a>
-                  <a>
-                    <svg-icon
-                      icon-class="email"
-                      class-name="zhihu-style"
-                    ></svg-icon>
-                    E-Mail
-                  </a>
-                </div>
-              </nav>
-            </div>
+                <el-menu default-active="1" class="el-menu-vertical">
+                  <el-menu-item index="1" @click="menuOpen('1')">
+                    <i class="el-icon-edit-outline"></i>
+                    <span slot="title">我的文章</span>
+                  </el-menu-item>
+                  <el-menu-item index="2" @click="menuOpen('2')">
+                    <i class="el-icon-magic-stick"></i>
+                    <span slot="title">我的杂谈</span>
+                  </el-menu-item>
+                  <el-menu-item index="3" @click="menuOpen('3')">
+                    <i class="el-icon-notebook-2"></i>
+                    <span slot="title">我的书屋</span>
+                  </el-menu-item>
+                  <el-menu-item index="4" @click="menuOpen('4')">
+                    <i class="el-icon-time"></i>
+                    <span slot="title">我的经历</span>
+                  </el-menu-item>
+                </el-menu>
+              </div>
+            </transition>
+            <transition appear appear-to-class="animated fadeInDown">
+              <div class="sidebar-inner sticky">
+                <el-avatar shape="square" :src="squareUrl"></el-avatar>
+                <p class="site-author-name">{{ username }}</p>
+                <p class="site-login" v-if="!isLogin">
+                  <a class="site-login-a" @click="showLogin('regist')">注册</a>
+                  <a class="site-login-a" @click="showLogin('login')">登录</a>
+                </p>
+                <nav class="site-nav">
+                  <div v-if="isLogin">
+                    <div class="site-state-item" @click="menuOpen('1')">
+                      <span>{{ articles }}</span>
+                      <p>articles</p>
+                    </div>
+                    <el-divider direction="vertical"></el-divider>
+                    <div class="site-state-item" @click="menuOpen('2')">
+                      <span>{{ essays }}</span>
+                      <p>essays</p>
+                    </div>
+                    <el-divider direction="vertical"></el-divider>
+                    <div class="site-state-item" @click="tagOpen()">
+                      <span>{{ tags }}</span>
+                      <p>tags</p>
+                    </div>
+                  </div>
+                  <div class="links-of-author-item">
+                    <a href="https://github.com/ZunoJ" target="_blank">
+                      <svg-icon
+                        icon-class="github"
+                        class-name="svg-style"
+                      ></svg-icon>
+                      Github
+                    </a>
+                    <a>
+                      <svg-icon
+                        icon-class="man"
+                        class-name="svg-style"
+                      ></svg-icon>
+                      Medium
+                    </a>
+                    <a>
+                      <svg-icon
+                        icon-class="zhihu"
+                        class-name="zhihu-style"
+                      ></svg-icon>
+                      Zhihu
+                    </a>
+                    <a>
+                      <svg-icon
+                        icon-class="email"
+                        class-name="zhihu-style"
+                      ></svg-icon>
+                      E-Mail
+                    </a>
+                  </div>
+                </nav>
+              </div>
+            </transition>
           </div>
           <div class="content-wrap">
             <div>
@@ -102,6 +108,7 @@
           class="el-backtop"
           style="bottom: 100px;right: 40px;border-radius: 0;font-size: 12px;font-weight: 800;"
           @click="pagetType = '5'"
+          v-if="isLogin"
         >
           发文
         </div>
@@ -393,6 +400,7 @@ export default {
                 username: res.data.username,
                 userhead: res.data.userhead,
                 usertoken: res.data.usertoken,
+                usertags: res.data.usertags,
                 essays: res.data.essays,
                 articles: res.data.articles,
                 tags: res.data.usertags.split(",").length
@@ -404,6 +412,7 @@ export default {
                   username: res.data.username,
                   userhead: res.data.userhead,
                   usertoken: res.data.usertoken,
+                  usertags: res.data.usertags,
                   essays: res.data.essays,
                   articles: res.data.articles,
                   tags: res.data.usertags.split(",").length
@@ -451,6 +460,7 @@ export default {
                 username: res.data.username,
                 userhead: res.data.userhead,
                 usertoken: res.data.usertoken,
+                usertags: res.data.usertags,
                 essays: "0",
                 articles: "0",
                 tags: res.data.usertags.split(",").length
@@ -462,6 +472,7 @@ export default {
                   username: res.data.username,
                   userhead: res.data.userhead,
                   usertoken: res.data.usertoken,
+                  usertags: res.data.usertags,
                   essays: "0",
                   articles: "0",
                   tags: res.data.usertags.split(",").length
@@ -501,6 +512,13 @@ export default {
     },
     receivingHtml(doc) {
       console.log(doc);
+    },
+    tagOpen() {
+      let tags = this.userInfo.usertags;
+      this.$message({
+        showClose: true,
+        message: tags
+      });
     },
     // 点击图片回到顶部方法，加计时器是为了过渡顺滑
     backTop() {
@@ -545,6 +563,7 @@ export default {
       this.isLogin = true;
       this.squareUrl = this.userInfo.userhead;
       this.username = this.userInfo.username;
+      this.usertags = this.userInfo.usertags;
       this.tags = this.userInfo.tags;
       this.articles = this.userInfo.articles;
       this.essays = this.userInfo.essays;
@@ -705,5 +724,10 @@ export default {
   width: 78px;
   height: 78px;
   display: block;
+}
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 }
 </style>

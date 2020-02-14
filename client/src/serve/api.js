@@ -9,5 +9,7 @@ export default {
   publishComments: p => post("/api/publishComments", p), // 发布评论
   queryComments: p => post("/api/queryComments", p), // 查询评论
   addBooks: p => post("/api/addBooks", p), // 添加书籍
-  queryBooks: p => post("/api/queryBooks", p) // 查询书籍
+  queryBooks: p => post("/api/queryBooks", p), // 查询书籍
+  deleteBooks: p => post("/api/deleteBooks", p), // 删除书籍
+  deleteComments: p => post("/api/deleteComments", p) // 删除书籍
 };

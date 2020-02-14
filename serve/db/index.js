@@ -179,6 +179,10 @@ var Book = sequelize.define('t_book'/*自定义表名*/, {
     bookurl: {
         type: Sequelize.STRING
     },
+    //书籍密码
+    bookpsd: {
+        type: Sequelize.STRING
+    },
     //加入时间
     addtime: {
         type: Sequelize.DATE,

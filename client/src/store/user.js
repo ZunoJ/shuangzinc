@@ -7,6 +7,7 @@ export default {
       userhead: "",
       usertoken: "",
       articles: "",
+      usertags: "",
       essays: "",
       tags: ""
     }

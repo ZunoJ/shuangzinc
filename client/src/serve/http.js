@@ -43,6 +43,7 @@ axios.interceptors.response.use(
           username: "",
           userhead: "",
           usertoken: "",
+          usertags: "",
           articles: "",
           essays: "",
           tags: ""

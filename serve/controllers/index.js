@@ -4,7 +4,7 @@ const db = require('../db')
 const queryArticles = async (ctx, next) => {
     let {useraccount = '', articletype = ''} = ctx.request.body
     try {
-        if(useraccount == '' || articletype == ''){
+        if(articletype == ''){
             ctx.send('F','发布失败，请传入文章类型或用户账户。',{
                 data:false
             }) 
@@ -12,7 +12,6 @@ const queryArticles = async (ctx, next) => {
         }
         let res = await db.Article.findAll({
             where:{
-                useraccount,
                 articletype
             },
             order:[
@@ -93,7 +92,7 @@ const deleteArticle = async (ctx, next) => {
     let {articleid = '', useraccount = ''} = ctx.request.body
     try {
         if(useraccount == '' || articleid == ''){
-            ctx.send('F','发布失败，请传入文章ID或用户账户。',{
+            ctx.send('F','删除失败，请传入文章ID或用户账户。',{
                 data:false
             }) 
             return;
@@ -119,7 +118,7 @@ const deleteComments = async (ctx, next) => {
     let {commentid = '', useraccount = ''} = ctx.request.body
     try {
         if(useraccount == '' || commentid == ''){
-            ctx.send('F','发布失败，请传入评价ID或用户账户。',{
+            ctx.send('F','删除失败，请传入评价ID或用户账户。',{
                 data:false
             }) 
             return;
@@ -217,9 +216,9 @@ const queryBooks = async (ctx, next) => {
 }
 
 const addBooks = async (ctx, next) => {
-    let {useraccount = '', bookimg = '', bookurl = '', bookname = ''} = ctx.request.body
+    let {useraccount = '', bookimg = '', bookurl = '', bookname = '', bookpsd = ''} = ctx.request.body
     try {
-        if(useraccount == '' || bookimg == '' || bookurl == '' || bookname == ''){
+        if(useraccount == '' || bookimg == '' || bookurl == '' || bookname == '' || bookpsd == ''){
             ctx.send('F','发布失败，请完整输入要素。',{
                 data:false
             }) 
@@ -234,7 +233,8 @@ const addBooks = async (ctx, next) => {
         let res = await db.Book.create({
             bookimg,
             bookurl,
-            bookname
+            bookname,
+            bookpsd
         })
         if(res != null) {
             ctx.send('S','新增成功!',{
@@ -249,12 +249,34 @@ const addBooks = async (ctx, next) => {
 }
 
 const deleteBooks = async (ctx, next) => {
-    let {name, sex} = ctx.request.body
-    console.log(name)
-    ctx.send({
-        status: 'success',
-        data: 'hello ikcmap'
-    })
+    let {bookid = '', useraccount = ''} = ctx.request.body
+    try {
+        if(useraccount == '' || bookid == ''){
+            ctx.send('F','删除失败，请传入书籍ID或用户账户。',{
+                data:false
+            }) 
+            return;
+        }
+        if(useraccount != '709692126'){
+            ctx.send('F','您没有权限操作!',{
+                data:false
+            }) 
+            return;
+        }
+        let res = await db.Book.destroy({
+            where:{
+                bookid
+            }})
+        if(res != null) {
+            ctx.send('S','删除成功!',{
+                data:res
+            })
+        }
+    } catch(e){
+        ctx.send('F',e,{
+            data:false
+        })
+    }
 }
 
 module.exports = {

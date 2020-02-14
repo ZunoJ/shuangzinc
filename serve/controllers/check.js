@@ -73,7 +73,7 @@ function makeCapcha() {
     return {checkcode:str,img}
 }
 
-// 验证码获取
+// 头像上传
 const headupload = async (ctx, next) => {
     try {
         ctx.send('S','上传图片成功',{

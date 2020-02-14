@@ -3,7 +3,7 @@
     <div style="height: 620px;display: flex;">
       <div style="margin: auto;">
         <i class="el-icon-edit" style="font-size:50px;"></i>
-        <p>还没有填写经历，可以通知管理员填写哦~</p>
+        <p>还没有填写经历，可以通知小明填写哦~</p>
       </div>
     </div>
   </div>
