@@ -4,5 +4,5 @@ module.exports = {
     // token 加密字符串,
     TOKEN_ENCODE_STR: "zino_token_encode_str",
     // 添加需验证
-    URL_YES_PASS: ['/api/queryBooks']
+    URL_YES_PASS: ['/api/queryBooks','/api/publishComments']
 }
