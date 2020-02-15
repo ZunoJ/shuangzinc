@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('info', 'root', '709692126a', {
-    host: 'cdb-0fhntbns.bj.tencentcdb.com',
-    port:'10126',
+const sequelize = new Sequelize('blog', 'root', '709692126aB@', {
+    host: '111.229.177.168',
+    port:'3306',
     dialect: 'mysql',
     //解决中文输入问题
     define: {
