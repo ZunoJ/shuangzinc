@@ -138,7 +138,7 @@
           </header>
           <p
             v-html="articleInfo.articlecontent"
-            style="text-align: -webkit-auto;line-height: 28px;"
+            style="text-align: -webkit-auto;line-height: 28px;font-size: 14px;"
           ></p>
           <div class="post-footer"></div>
           <div

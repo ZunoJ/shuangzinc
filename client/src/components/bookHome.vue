@@ -6,10 +6,7 @@
     >
       <div style="margin: auto;">
         <i class="el-icon-edit" style="font-size:50px;"></i>
-        <p>还没有上传书籍，可以通知管理员上传哦~</p>
-        <el-button type="primary" @click="bookVisible = true" size="mini"
-          >上传书籍</el-button
-        >
+        <p>还没有上传书籍，可以通知小明上传哦~</p>
       </div>
     </div>
     <div

@@ -1,7 +1,6 @@
 let eventbus = {};
 
-eventbus.install = function(Vue, options) {
-  console.log(options);
+eventbus.install = function(Vue) {
   Vue.prototype.$eventBus = new Vue();
 };
 

@@ -82,7 +82,7 @@ export default {
           articletitle: this.articletitle,
           articleintro: this.articleintro,
           articlecontent: this.articlecontent,
-          articletime: moment(new Date()).format("yyyy-MM-DD"),
+          articletime: moment(new Date()).format("YYYY-MM-DD"),
           useraccount: this.userInfo.useraccount
         };
         httpserve.publishArticles(params).then(res => {

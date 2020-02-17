@@ -85,6 +85,12 @@
                     </a>
                   </div>
                 </nav>
+                <p style="font-size: 12px;margin-bottom:5px;">
+                  湘ICP备20002676号-1
+                </p>
+                <p style="font-size: 12px;margin-top:5px;margin-bottom:0;">
+                  ©2020 DOUBLE·Powered by Zinc
+                </p>
               </div>
             </transition>
           </div>
@@ -267,6 +273,7 @@ import richEditor from "../components/publishArticle";
 import selfArticle from "../components/selfArticle";
 import bookHome from "../components/bookHome";
 import selfResume from "../components/selfResume";
+import md5 from "js-md5";
 
 export default {
   name: "home",
@@ -386,7 +393,7 @@ export default {
     loginSystem() {
       const params = {
         useraccount: this.loginForm.useraccount,
-        userpwd: this.loginForm.userpwd,
+        userpwd: md5(this.loginForm.userpwd),
         checktoken: this.loginForm.checktoken,
         checkcode: this.loginForm.checkcode
       };
@@ -430,7 +437,6 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -438,8 +444,8 @@ export default {
     registeredMember() {
       const params = {
         useraccount: this.loginForm.useraccount,
-        userpwd: this.loginForm.userpwd,
-        reuserpwd: this.loginForm.reuserpwd,
+        userpwd: md5(this.loginForm.userpwd),
+        reuserpwd: md5(this.loginForm.reuserpwd),
         username: this.loginForm.username,
         usertags: this.loginForm.tagList.join(","),
         userhead: this.loginForm.userhead,
@@ -490,7 +496,6 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -510,9 +515,7 @@ export default {
       this.checkCodeImg = "";
       this.$refs["loginForm"].resetFields();
     },
-    receivingHtml(doc) {
-      console.log(doc);
-    },
+    receivingHtml() {},
     tagOpen() {
       let tags = this.userInfo.usertags;
       this.$message({
@@ -555,6 +558,14 @@ export default {
         this.isLogin = true;
         this.squareUrl = newValue.userhead;
         this.username = newValue.username;
+      } else {
+        this.isLogin = false;
+        this.squareUrl = "";
+        this.username = "";
+        this.usertags = "";
+        this.tags = "";
+        this.articles = "";
+        this.essays = "";
       }
     }
   },

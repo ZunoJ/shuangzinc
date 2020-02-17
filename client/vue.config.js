@@ -11,7 +11,7 @@ function resolve(dir) {
 module.exports = {
   devServer: {
     port: 8080,
-    proxy: "http://localhost:3000"
+    proxy: "http://111.229.177.168"
     // before(app){
     //     mock.init(app);
     // }
