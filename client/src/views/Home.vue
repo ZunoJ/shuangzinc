@@ -85,9 +85,14 @@
                     </a>
                   </div>
                 </nav>
-                <p style="font-size: 12px;margin-bottom:5px;">
+                <a
+                  style="font-size: 12px;margin: 5px 0;display: block;width: 100%;"
+                  rel="nofollow"
+                  href="http://www.beian.miit.gov.cn"
+                  target="_blank"
+                >
                   湘ICP备20002676号-1
-                </p>
+                </a>
                 <p style="font-size: 12px;margin-top:5px;margin-bottom:0;">
                   ©2020 DOUBLE·Powered by Zinc
                 </p>
